@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نضج | NUDHUJ AutoDeal OS — المنصة السحابية الذاتية للمبيعات والعروض التفاعلية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080a0f;
+      --surface: #11151f;
+      --surface-2: #171d2b;
+      --border: rgba(212, 175, 55, 0.22);
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-dark: #aa8220;
+      --emerald: #10b981;
+      --blue: #3b82f6;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', system-ui, sans-serif; scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(circle at 15% 10%, rgba(212, 175, 55, 0.12), transparent 38%),
+        radial-gradient(circle at 85% 25%, rgba(59, 130, 246, 0.08), transparent 40%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Navbar */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8, 10, 15, 0.86); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); padding: 0.9rem 0;
+    }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: #fff; }
+    .brand img { width: 48px; height: 48px; border-radius: 0.7rem; border: 1px solid var(--gold); object-fit: cover; }
+    .brand-title { font-weight: 900; font-size: 1.25rem; color: var(--gold-light); letter-spacing: 0.02em; }
+    .brand-sub { font-size: 0.72rem; color: var(--muted); display: block; letter-spacing: 0.08em; }
+    .nav-links { display: flex; gap: 1.6rem; align-items: center; }
+    .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.94rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    .btn {
+      padding: 0.65rem 1.35rem; border-radius: 0.65rem; font-weight: 700; font-size: 0.92rem;
+      cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.14);
+      background: var(--surface-2); color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+    .btn-gold {
+      background: linear-gradient(135deg, #e5c158 0%, #b88b28 100%);
+      color: #080a0f; border: none; font-weight: 900;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
+    }
+    .btn-gold:hover { box-shadow: 0 12px 32px rgba(212, 175, 55, 0.4); transform: translateY(-2px); }
+
+    /* Hero */
+    .hero { padding: 5rem 0 4rem; text-align: center; position: relative; }
+    .hero-logo-showcase {
+      width: 118px; height: 118px; border-radius: 1.5rem; object-fit: cover;
+      border: 2px solid var(--gold); box-shadow: 0 15px 45px rgba(212, 175, 55, 0.28);
+      margin-bottom: 1.5rem;
+    }
+    .pill-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(212, 175, 55, 0.12); border: 1px solid var(--border);
+      color: var(--gold-light); padding: 0.4rem 1.1rem; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.1rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.22;
+      max-width: 960px; margin: 0 auto 1.25rem;
+      background: linear-gradient(180deg, #ffffff 0%, #f3e5ab 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.18rem; color: var(--muted); max-width: 780px; margin: 0 auto 2.25rem;
+    }
+    .hero-cta-group { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 3.5rem; }
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;
+      background: rgba(17, 21, 31, 0.85); border: 1px solid var(--border);
+      border-radius: 1.25rem; padding: 1.75rem; max-width: 1000px; margin: 0 auto;
+    }
+    .stat-box h3 { font-size: 2rem; font-weight: 900; color: var(--gold-light); }
+    .stat-box span { font-size: 0.88rem; color: var(--muted); }
+
+    /* Section Headers */
+    section { padding: 4.5rem 0; }
+    .sec-header { text-align: center; max-width: 760px; margin: 0 auto 3.25rem; }
+    .sec-header h2 { font-size: 2.2rem; font-weight: 900; color: #fff; margin-bottom: 0.75rem; }
+    .sec-header p { color: var(--muted); font-size: 1.05rem; }
+
+    /* 7-Stage Pipeline Interactive Cards */
+    .stages-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;
+    }
+    .stage-card {
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1.15rem; padding: 1.85rem; position: relative;
+      transition: all 0.25s; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .stage-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .stage-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(212, 175, 55, 0.15); color: var(--gold-light);
+      border: 1px solid var(--border); font-weight: 900; font-size: 0.82rem;
+      padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: 1rem; width: fit-content;
+    }
+    .stage-card h3 { font-size: 1.28rem; font-weight: 800; color: #fff; margin-bottom: 0.65rem; }
+    .stage-card p { color: #cbd5e1; font-size: 0.94rem; margin-bottom: 1rem; }
+    .stage-bullets { list-style: none; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 0.9rem; }
+    .stage-bullets li { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; display: flex; gap: 0.5rem; }
+
+    /* Universal Industry Banner */
+    .universal-box {
+      background: linear-gradient(135deg, rgba(23,29,43,0.95) 0%, rgba(17,21,31,0.98) 100%);
+      border: 1px solid var(--border); border-radius: 1.5rem; padding: 3rem 2.25rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: center;
+    }
+    .sector-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+    .sector-tag {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.45rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; color: var(--gold-light); font-weight: 600;
+    }
+
+    /* Pricing Section */
+    .billing-toggle {
+      display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 2.5rem;
+    }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; align-items: stretch;
+    }
+    .price-card {
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 1.35rem; padding: 2.25rem 1.85rem; display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; transition: all 0.25s;
+    }
+    .price-card.featured {
+      border: 2px solid var(--gold);
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, var(--surface) 100%);
+      transform: scale(1.02);
+    }
+    .popular-ribbon {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: #080a0f; font-weight: 900; font-size: 0.78rem;
+      padding: 0.25rem 1rem; border-radius: 999px;
+    }
+    .price-amount { font-size: 2.75rem; font-weight: 900; color: #fff; margin: 1rem 0 0.25rem; }
+    .price-amount span { font-size: 0.95rem; color: var(--muted); font-weight: 500; }
+    .price-features { list-style: none; margin: 1.5rem 0 2rem; display: grid; gap: 0.75rem; }
+    .price-features li { font-size: 0.92rem; color: #e2e8f0; display: flex; align-items: flex-start; gap: 0.55rem; }
+
+    /* Auth Modal */
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .auth-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1.25rem; width: 100%; max-width: 480px; padding: 2rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.65);
+    }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.35rem; font-weight: 600; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 0.75rem 1rem; border-radius: 0.6rem;
+      background: #0b0e16; border: 1px solid rgba(255,255,255,0.14); color: #fff; font-size: 0.95rem;
+    }
+    .auth-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+    .auth-tab {
+      flex: 1; text-align: center; padding: 0.75rem; cursor: pointer; font-weight: 800; color: var(--muted);
+      border-bottom: 2px solid transparent;
+    }
+    .auth-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.08); padding: 2.5rem 0; margin-top: 3rem;
+      text-align: center; color: var(--muted); font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="brand">
+        <img src="/assets/logo.jpg" alt="NUDHUJ AutoDeal OS" />
+        <div>
+          <span class="brand-title">نضج | NUDHUJ AutoDeal OS</span>
+          <span class="brand-sub">AUTONOMOUS REVENUE & PROPOSALS OS</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#stages">المراحل السبعة للنظام</a>
+        <a href="#universal">ملائم لأي شركة ونشاط</a>
+        <a href="#pricing">الباقات والأسعار</a>
+        <a href="#faq">الأسئلة الشائعة</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn" onclick="openAuthModal('login')">🔐 تسجيل الدخول</button>
+        <button class="btn btn-gold" onclick="openAuthModal('register', 'free')">🚀 ابدأ بالباقة المجانية</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <img src="/assets/logo.jpg" alt="NUDHUJ Logo" class="hero-logo-showcase" />
+      <div>
+        <span class="pill-badge">✨ الجيل الجديد من أنظمة المبيعات والعروض الذاتية — autodeal.nudhuj.com</span>
+      </div>
+      <h1>من فهم نشاط شركتك واستكشاف العملاء إلى توقيع العرض الفني والمالي.. تلقائياً بالكامل</h1>
+      <p>
+        منصة <strong>NUDHUJ AutoDeal OS</strong> تمنح شركتك فريق مبيعات وتطوير أعمال ذكي يعمل على مدار الساعة عبر <strong>8 وكلاء ذكاء اصطناعي متخصصين</strong>: يتعرف على خدماتك وأسعارك، يكتشف عملاءك المستهدفين، يراسلهم بذكاء، ويصدر عروضاً فنية ومالية تفاعلية جاهزة للاعتماد.
+      </p>
+      <div class="hero-cta-group">
+        <button class="btn btn-gold" style="font-size:1.05rem; padding:0.9rem 2rem;" onclick="openAuthModal('register', 'free')">
+          🎁 أنشئ حسابك مجاناً الآن (الباقة المجانية فورية)
+        </button>
+        <a href="/app" class="btn" style="font-size:1.05rem; padding:0.9rem 1.8rem;">
+          ⚡ استعراض لوحة التحكم التفاعلية المباشرة
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-box">
+          <h3>8 وكلاء AI</h3>
+          <span>يعملون في تناغم تام من الاكتشاف حتى الإغلاق</span>
+        </div>
+        <div class="stat-box">
+          <h3>100%</h3>
+          <span>يتكيف تلقائياً مع أي نشاط تجاري أو خدمي</span>
+        </div>
+        <div class="stat-box">
+          <h3>4 طبقات حماية</h3>
+          <span>للعروض الفنية والمالية التفاعلية وحاسبة ROI</span>
+        </div>
+        <div class="stat-box">
+          <h3>دقيقتان</h3>
+          <span>لإعداد هوية شركتك والبدء الفوري بدون كود</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed 7+1 Stages Walkthrough -->
+  <section id="stages">
+    <div class="container">
+      <div class="sec-header">
+        <span class="pill-badge">🔄 شرح تفصيلي لدورة العمل المؤتمتة</span>
+        <h2>كيف يعمل NUDHUJ AutoDeal OS في جميع مراحله؟</h2>
+        <p>رحلة متكاملة تغنيك عن عشرات الأدوات المتفرقة، مصممة ليعمل بها المستخدم العادي بضغطة زر واحدة أو عبر الطيار الآلي المستمر.</p>
+      </div>
+
+      <div class="stages-grid">
+        <div class="stage-card">
+          <div>
+            <span class="stage-num">المرحلة 1 • Company Profiler Agent</span>
+            <h3>🧠 التعرف الذكي على هوية وأهداف شركتك</h3>
+            <p>بمجرد إدخال رابط موقع شركتك أو رفع ملفك التعريفي (Company Profile)، يقوم الوكيل بفحص نشاطك واستيعاب خدماتك وميزتك التنافسية.</p>
+          </div>
+          <ul class="stage-bullets">
+            <li>✔️ استخراج تلقائي لملف العميل المثالي (ICP) والقطاعات المستهدفة</li>
+            <li>✔️ بناء كتالوج خدمات وأسعار شركتك آلياً</li>
+            <li>✔️ صياغة عروض القيمة بالعربية والإنجليزية</li>
+          </ul>
+        </div>
+
+        <div class="stage-card">
+          <div>
+            <span class="stage-num">المرحلة 2 • Dynamic Scout Agent</span>
+            <h3>🔍 الاستكشاف الذاتي الحر للعملاء المحتملين</h3>
+            <p>يبحث الوكيل عن الشركات وصناع القرار المطابقين لنشاطك في أي قطاع وأي دولة تحددها، مع إمكانية استيراد قوائم CSV مباشرة.</p>
+          </div>
+          <ul class="stage-bullets">
+            <li>✔️ استكشاف ديناميكي لأي قطاع (تقنية، مقاولات، طب، تجزئة، استشارات...)</li>
+            <li>✔️ تحديد اسم المسؤول ومنصبه وبريده وموقع الشركة</li>
+            <li>✔️ تصنيف جغرافي دقيق (السعودية، الخليج، مصر، عالمي)</li>
+          </ul>
+        </div>
+
+        <div class="stage-card">
+          <div>
+            <span class="stage-num">المرحلة 3 • Enricher & ICP Scorer</span>
+            <h3>🛡️ الفحص التقني وتقييم الملاءمة (0 - 100)</h3>
+            <p>يزور الوكيل موقع كل عميل محتمل، يتحقق من صحة نطاق البريد الإلكتروني وسجلات DNS/MX، ويستنتج نقاط الألم (Pain Points).</p>
+          </div>
+          <ul class="stage-bullets">
+            <li>✔️ التحقق من صلاحية البريد لمنع الارتداد وحماية سمعة الدومين</li>
+            <li>✔️ تقييم كل عميل من 100 نقطة مع شرح سبب التقييم</li>
+            <li>✔️ استبعاد العملاء غير المطابقين تلقائياً قبل المراسلة</li>
+          </ul>
+        </div>
+
+        <div class="stage-card">
+          <div>
+            <span class="stage-num">المرحلة 4 • Hyper-Personalized Writer</span>
+            <h3>✍️ صياغة سلاسل البريد المخصصة (3 خطوات)</h3>
+            <p>يكتب الوكيل سلسلة من 3 رسائل (رسالة أولى + متابعتين) مخصصة لكل عميل باسم شركتك، مع فلتر صارم يحذف الكلمات المبتذلة.</p>
+          </div>
+          <ul class="stage-bullets">
+            <li>✔️ افتتاحية مخصصة (Icebreaker) مبنية على نشاط العميل الفعلي</li>
+            <li>✔️ التزام صارم بعدد الكلمات لزيادة معدل القراءة والرد</li>
+            <li>✔️ دعم كامل للغتين العربية والإنجليزية بلهجة تنفيذية</li>
+          </ul>
+        </div>
+
+        <div class="stage-card">
+          <div>
+            <span class="stage-num">المرحلة 5 • Approval Ladder & Smart Sender</span>
+            <h3>🚦 سلم الموافقات والإرسال المحاكي للبشر</h3>
+            <p>تحكم كامل عبر سلم الموافقات لمراجعة وتعديل أي رسالة قبل إرسالها، أو تفعيل الطيار الآلي للجدولة والإرسال خلال ساعات العمل.</p>
+          </div>
+          <ul class="stage-bullets">
+            <li>✔️ احترام السقف اليومي للإرسال وفواصل زمنية عشوائية</li>
+            <li>✔️ وضع المحاكاة الآمن (Dry-Run) للتجربة بدون إرسال فعلي</li>
+            <li>✔️ ربط مباشر مع أي خادم بريد SMTP مع فحص فوري للاتصال</li>
+          </ul>
+        </div>
+
+        <div class="stage-card">
+          <div>
+            <span class="stage-num">المرحلة 6 • Inbox Handler & Stop-on-Reply</span>
+            <h3>📥 قراءة الردود وإيقاف المتابعات الفوري</h3>
+            <p>يراقب الوكيل صندوق الوارد عبر IMAP، يصنف نية العميل (مهتم، استفسار، اعتراض، غير مهتم)، ويوقف المتابعات التلقائية فوراً.</p>
+          </div>
+          <ul class="stage-bullets">
+            <li>✔️ إيقاف فوري لرسائل المتابعة بمجرد رد العميل (Stop-on-Reply)</li>
+            <li>✔️ صياغة رد ذكي مقترح يتضمن رابط حجز الاجتماع (Calendly)</li>
+            <li>✔️ تحويل حالة العميل المهتم إلى (تم حجز الاجتماع)</li>
+          </ul>
+        </div>
+
+        <div class="stage-card" style="grid-column: 1 / -1; border-color: var(--gold);">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; align-items:center;">
+            <div>
+              <span class="stage-num">المرحلة 7 • Turnkey Interactive Proposals Engine</span>
+              <h3>💎 محرك العروض الفنية والمالية التفاعلية (إغلاق الصفقات)</h3>
+              <p>بمجرد انتهاء مكالمة المبيعات، يحول الوكيل ملاحظات أو تفريغ المكالمة إلى <strong>عرض فني ومالي تفاعلي</strong> باسم شركتك وخدماتك وأسعارك على رابط مخصص (`/c/client-name`) مع مسودة بريد جاهزة للإرسال للعميل.</p>
+            </div>
+            <ul class="stage-bullets" style="border-top:none;">
+              <li>✔️ جدول مالي تفاعلي مع باقات ترقية اختيارية يختارها العميل مباشرة</li>
+              <li>✔️ حاسبة عائد استثماري (ROI) وجدول دفعات وخارطة طريق تنفيذية</li>
+              <li>✔️ حماية الملكية الفكرية بعلامة مائية رباعية الطبقات واعتماد إلكتروني فوري</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Universal Fit Section -->
+  <section id="universal">
+    <div class="container">
+      <div class="universal-box">
+        <div>
+          <span class="pill-badge">🌐 مصمم لخدمة أي شركة بأي نشاط</span>
+          <h2 style="font-size:2rem; font-weight:900; margin-bottom:1rem;">أياً كان مجال شركتك.. النظام يتشكل لخدمة أهدافك</h2>
+          <p style="color:#cbd5e1; margin-bottom:1rem;">
+            سواء كنت تقدم خدمات استشارية، برمجيات، مقاولات، توريد، رعاية صحية، أو أجهزة ذكية، فإن مركز الإعدادات الشامل ومحرك التعرف الذكي يبني لك قوالب البريد والعروض المالية المطابقة لنشاطك في دقائق.
+          </p>
+          <div class="sector-tags">
+            <span class="sector-tag">💻 شركات البرمجيات والـ SaaS</span>
+            <span class="sector-tag">⚖️ مكاتب المحاماة والاستشارات</span>
+            <span class="sector-tag">🏗️ المقاولات والتطوير العقاري</span>
+            <span class="sector-tag">🏥 المراكز الطبية والعيادات</span>
+            <span class="sector-tag">📦 المصانع والتوريد واللوجستيات</span>
+            <span class="sector-tag">📈 وكالات التسويق والإعلان</span>
+            <span class="sector-tag">🤖 مكائن الخدمة الذاتية والأجهزة</span>
+          </div>
+        </div>
+        <div style="background:#0b0e16; border:1px solid var(--border); border-radius:1rem; padding:1.75rem;">
+          <h4 style="color:var(--gold-light); margin-bottom:1rem; font-size:1.1rem;">⚙️ مركز تحكم وإعدادات شامل للمستخدم العادي:</h4>
+          <ul class="price-features" style="margin:0;">
+            <li>✅ <strong>معالج تهيئة من 3 خطوات:</strong> يضبط كل شيء بدون أي خبرة برمجية.</li>
+            <li>✅ <strong>فحص اتصال فوري:</strong> أزرار اختبار مباشر لخوادم SMTP/IMAP ومفاتيح الذكاء الاصطناعي.</li>
+            <li>✅ <strong>كتالوج الخدمات والأسعار:</strong> أضف خدماتك وأسعارك لتظهر تلقائياً في العروض التفاعلية.</li>
+            <li>✅ <strong>حفظ دائم ومؤمن:</strong> إعدادات شركتك معزولة ومحفوظة بشكل دائم.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <div class="container">
+      <div class="sec-header">
+        <span class="pill-badge">💳 باقات مرنة تناسب حجم طموحك</span>
+        <h2>ابدأ مجاناً اليوم، وقم بالترقية مع نمو صفقاتك</h2>
+        <p>جميع الباقات تمنحك وصولاً كاملاً للوكلاء السبعة ومحرك العروض التفاعلية ولوحة التحكم الشاملة.</p>
+      </div>
+
+      <div class="billing-toggle">
+        <button class="btn" id="btnMonthly" onclick="setBillingCycle('monthly')" style="border-color:var(--gold);">دفع شهري مرن</button>
+        <button class="btn" id="btnYearly" onclick="setBillingCycle('yearly')">دفع سنوي (وفر 20% 🎁)</button>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Plan -->
+        <div class="price-card">
+          <div>
+            <span class="stage-num">للتجربة والانطلاق السريع</span>
+            <h3 style="font-size:1.45rem; font-weight:900;">الباقة المجانية (Starter Free)</h3>
+            <div class="price-amount">$0 <span>/ للأبد بدون بطاقة</span></div>
+            <p style="color:var(--muted); font-size:0.88rem;">مثالية لتجربة كافة مراحل النظام وإعداد هوية شركتك وإصدار أولى عروضك التفاعلية.</p>
+            <ul class="price-features">
+              <li>✔️ استكشاف حتى <strong>25 عميلاً محتملاً</strong> شهرياً</li>
+              <li>✔️ صياغة وإرسال حتى <strong>50 رسالة بريد</strong> شهرياً</li>
+              <li>✔️ إنشاء <strong>3 عروض فنية ومالية تفاعلية</strong> شهرياً</li>
+              <li>✔️ محرك التعرف الذكي على موقع وهوية شركتك</li>
+              <li>✔️ سلم الموافقات الآمن ووضع المحاكاة (Dry-Run)</li>
+            </ul>
+          </div>
+          <button class="btn" style="width:100%; justify-content:center; padding:0.9rem;" onclick="openAuthModal('register', 'free')">
+            ابدأ بالباقة المجانية الآن
+          </button>
+        </div>
+
+        <!-- Growth Plan -->
+        <div class="price-card featured">
+          <div class="popular-ribbon">⭐ الأكثر اختياراً للشركات</div>
+          <div>
+            <span class="stage-num">للنمو وأتمتة المبيعات المستمرة</span>
+            <h3 style="font-size:1.45rem; font-weight:900;">باقة النمو (Growth Pro)</h3>
+            <div class="price-amount" id="growthPriceDisplay">$79 <span>/ شهرياً (299 ر.س)</span></div>
+            <p style="color:var(--muted); font-size:0.88rem;">كل ما تحتاجه شركتك لأتمتة استقطاب العملاء وإغلاق الصفقات بالطيار الآلي.</p>
+            <ul class="price-features">
+              <li>✔️ استكشاف حتى <strong>500 عميل محتمل</strong> شهرياً في أي قطاع</li>
+              <li>✔️ إرسال حتى <strong>2,000 رسالة بريد</strong> مع ربط SMTP/IMAP</li>
+              <li>✔️ إصدار <strong>30 عرضاً تفاعلياً</strong> مع حاسبة العائد ROI</li>
+              <li>✔️ <strong>تفعيل الطيار الآلي الكامل (Autopilot Scheduler)</strong></li>
+              <li>✔️ إيقاف تلقائي للمتابعات عند رد العميل وتصنيف النوايا</li>
+              <li>✔️ كتالوج خدمات وأسعار مخصص لشركتك</li>
+            </ul>
+          </div>
+          <button class="btn btn-gold" style="width:100%; justify-content:center; padding:0.9rem;" onclick="openAuthModal('register', 'growth')">
+            اشترك في باقة النمو
+          </button>
+        </div>
+
+        <!-- Business Plan -->
+        <div class="price-card">
+          <div>
+            <span class="stage-num">للمؤسسات والفرق المتقدمة</span>
+            <h3 style="font-size:1.45rem; font-weight:900;">باقة الأعمال (Enterprise Scale)</h3>
+            <div class="price-amount" id="bizPriceDisplay">$199 <span>/ شهرياً (749 ر.س)</span></div>
+            <p style="color:var(--muted); font-size:0.88rem;">سعة قصوى مع إزالة العلامة المائية للمنصة وتخصيص العروض بهوية شركتك 100%.</p>
+            <ul class="price-features">
+              <li>✔️ حتى <strong>10,000 عميل</strong> و <strong>15,000 رسالة بريد</strong> شهرياً</li>
+              <li>✔️ <strong>500 عرض فني ومالي تفاعلي</strong> شهرياً</li>
+              <li>✔️ <strong>عروض بهوية شركتك الكاملة (100% White-Label)</strong></li>
+              <li>✔️ حماية الملكية الفكرية رباعية الطبقات باسم شركتك</li>
+              <li>✔️ تحليل ملفات PDF وبناء قاعدة معرفة عميقة</li>
+              <li>✔️ تعدد المستخدمين وتقارير تنفيذية متقدمة</li>
+            </ul>
+          </div>
+          <button class="btn" style="width:100%; justify-content:center; padding:0.9rem; border-color:var(--gold);" onclick="openAuthModal('register', 'business')">
+            ابدأ باقة الأعمال والمؤسسات
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq">
+    <div class="container" style="max-width:900px;">
+      <div class="sec-header">
+        <h2>الأسئلة الشائعة</h2>
+      </div>
+      <div style="display:grid; gap:1rem;">
+        <div class="stage-card">
+          <h3>هل أحتاج إلى خبرة تقنية أو برمجية لاستخدام المنصة؟</h3>
+          <p style="margin:0;">إطلاقاً. المنصة مزودة بمعالج تهيئة ذكي (Onboarding Wizard) ولوحة إعدادات بصرية شاملة تمكن أي مستخدم عادي من ضبط شركته وبريده وبدء الحملات في دقيقتين.</p>
+        </div>
+        <div class="stage-card">
+          <h3>كيف يتعرف البرنامج على نشاط شركتي وخدماتي؟</h3>
+          <p style="margin:0;">بمجرد وضع رابط موقعك الإلكتروني أو لصق نبذة/ملف تعريف شركتك، يقوم وكيل (Company Profiler) بتحليل نشاطك وتوليد عروض القيمة وكتالوج الخدمات والأسعار تلقائياً مع إمكانية تعديلها في أي وقت.</p>
+        </div>
+        <div class="stage-card">
+          <h3>هل يمكنني الترقية من الباقة المجانية إلى الباقات الأعلى لاحقاً؟</h3>
+          <p style="margin:0;">نعم، يمكنك البدء بالباقة المجانية فوراً، وترقية باقتك في أي لحظة من داخل لوحة التحكم بنقرة واحدة مع الاحتفاظ بكافة بياناتك وعملائك وعروضك.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div style="font-weight:800; color:var(--gold-light); margin-bottom:0.4rem;">نضج | NUDHUJ — AUTODEAL OS (AUTONOMOUS REVENUE OS)</div>
+      <div>جميع الحقوق محفوظة © 2026 • autodeal.nudhuj.com</div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal (Register & Login) -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="auth-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <img src="/assets/logo.jpg" style="width:36px; height:36px; border-radius:0.5rem; border:1px solid var(--gold);" />
+          <strong style="color:var(--gold-light);">بوابة المشتركين | NUDHUJ AutoDeal OS</strong>
+        </div>
+        <button onclick="closeAuthModal()" style="background:none; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabRegister" onclick="switchAuthTab('register')">إنشاء حساب جديد</div>
+        <div class="auth-tab" id="tabLogin" onclick="switchAuthTab('login')">تسجيل الدخول</div>
+      </div>
+
+      <div id="authErrorBox" style="display:none; background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#fca5a5; padding:0.7rem; border-radius:0.5rem; margin-bottom:1rem; font-size:0.86rem;"></div>
+
+      <!-- Register Form -->
+      <div id="registerFormBox">
+        <div class="form-group">
+          <label>اسم الشركة أو المؤسسة:</label>
+          <input type="text" id="regCompany" placeholder="مثال: شركة آفاق للحلول الهندسية" />
+        </div>
+        <div class="form-group">
+          <label>نشاط الشركة / القطاع:</label>
+          <input type="text" id="regIndustry" placeholder="مثال: الاستشارات، البرمجيات، المقاولات، الأجهزة الذكية..." />
+        </div>
+        <div class="form-group">
+          <label>الموقع الإلكتروني للشركة (اختياري للتعرف التلقائي):</label>
+          <input type="text" id="regWebsite" placeholder="https://yourcompany.com" />
+        </div>
+        <div class="form-group">
+          <label>الاسم الكامل:</label>
+          <input type="text" id="regName" placeholder="أدخل اسمك الكامل" />
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني للعمل:</label>
+          <input type="email" id="regEmail" placeholder="name@company.com" />
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور:</label>
+          <input type="password" id="regPassword" placeholder="••••••••" />
+        </div>
+        <div class="form-group">
+          <label>الباقة المختارة:</label>
+          <select id="regPlan">
+            <option value="free">🎁 الباقة المجانية (Starter Free - $0)</option>
+            <option value="growth">⭐ باقة النمو (Growth Pro - $79/شهر)</option>
+            <option value="business">💎 باقة الأعمال (Enterprise Scale - $199/شهر)</option>
+          </select>
+        </div>
+        <button class="btn btn-gold" style="width:100%; justify-content:center; padding:0.85rem; margin-top:0.5rem;" onclick="submitRegister()">
+          🚀 إنشاء مساحة العمل وتفعيل الباقة فوراً
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginFormBox" style="display:none;">
+        <div class="form-group">
+          <label>البريد الإلكتروني:</label>
+          <input type="email" id="loginEmail" value="admin@nudhuj.com" />
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور:</label>
+          <input type="password" id="loginPassword" value="Nudhuj@2026" />
+        </div>
+        <button class="btn btn-gold" style="width:100%; justify-content:center; padding:0.85rem; margin-top:0.5rem;" onclick="submitLogin()">
+          🔐 الدخول إلى لوحة التحكم
+        </button>
+        <div style="margin-top:0.9rem; font-size:0.8rem; color:var(--muted); text-align:center;">
+          بيانات الحساب التجريبي الافتراضي معبأة جاهزة للتجربة الفورية (`admin@nudhuj.com` / `Nudhuj@2026`)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let billingCycle = 'monthly';
+
+    function setBillingCycle(cycle) {
+      billingCycle = cycle;
+      document.getElementById('btnMonthly').style.borderColor = cycle === 'monthly' ? 'var(--gold)' : 'rgba(255,255,255,0.14)';
+      document.getElementById('btnYearly').style.borderColor = cycle === 'yearly' ? 'var(--gold)' : 'rgba(255,255,255,0.14)';
+      document.getElementById('growthPriceDisplay').innerHTML = cycle === 'yearly'
+        ? '$63 <span>/ شهرياً (يدفع سنوياً - وفر 20%)</span>'
+        : '$79 <span>/ شهرياً (299 ر.س)</span>';
+      document.getElementById('bizPriceDisplay').innerHTML = cycle === 'yearly'
+        ? '$159 <span>/ شهرياً (يدفع سنوياً - وفر 20%)</span>'
+        : '$199 <span>/ شهرياً (749 ر.س)</span>';
+    }
+
+    function openAuthModal(mode = 'register', plan = 'free') {
+      document.getElementById('authModal').classList.add('open');
+      document.getElementById('regPlan').value = plan;
+      switchAuthTab(mode);
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('open');
+    }
+
+    function switchAuthTab(mode) {
+      document.getElementById('authErrorBox').style.display = 'none';
+      const isReg = mode === 'register';
+      document.getElementById('tabRegister').classList.toggle('active', isReg);
+      document.getElementById('tabLogin').classList.toggle('active', !isReg);
+      document.getElementById('registerFormBox').style.display = isReg ? 'block' : 'none';
+      document.getElementById('loginFormBox').style.display = isReg ? 'none' : 'block';
+    }
+
+    async function submitRegister() {
+      const errBox = document.getElementById('authErrorBox');
+      errBox.style.display = 'none';
+      const payload = {
+        company_name: document.getElementById('regCompany').value.trim(),
+        industry: document.getElementById('regIndustry').value.trim() || 'حلول الأعمال والخدمات (B2B)',
+        website: document.getElementById('regWebsite').value.trim(),
+        full_name: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        password: document.getElementById('regPassword').value,
+        plan_tier: document.getElementById('regPlan').value
+      };
+      if (!payload.company_name || !payload.full_name || !payload.email || !payload.password) {
+        errBox.textContent = 'يرجى تعبئة اسم الشركة، الاسم الكامل، البريد الإلكتروني، وكلمة المرور.';
+        errBox.style.display = 'block';
+        return;
+      }
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        errBox.textContent = data.detail || 'حدث خطأ أثناء التسجيل.';
+        errBox.style.display = 'block';
+        return;
+      }
+      localStorage.setItem('autodeal_token', data.access_token);
+      window.location.href = '/app?onboarding=1';
+    }
+
+    async function submitLogin() {
+      const errBox = document.getElementById('authErrorBox');
+      errBox.style.display = 'none';
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        errBox.textContent = data.detail || 'بيانات الدخول غير صحيحة.';
+        errBox.style.display = 'block';
+        return;
+      }
+      localStorage.setItem('autodeal_token', data.access_token);
+      window.location.href = '/app';
+    }
+  </script>
+</body>
+</html>

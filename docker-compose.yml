@@ -1,0 +1,21 @@
+services:
+  sales-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sales_agent_engine
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      # Persistent storage for SQLite database and exported campaigns
+      - ./data:/app/data
+      # Optional: mount custom settings to tweak prompts or ICP without rebuilding
+      - ./config:/app/config
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/overview"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

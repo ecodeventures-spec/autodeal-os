@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة التحكم الموحدة | نضج NUDHUJ AutoDeal OS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080a0f;
+      --surface: #11151f;
+      --surface-2: #181f2e;
+      --surface-hover: #222b3f;
+      --border: #232c40;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-bg: rgba(212, 175, 55, 0.12);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #2563eb;
+      --emerald: #10b981;
+      --emerald-bg: rgba(16, 185, 129, 0.12);
+      --amber: #f59e0b;
+      --amber-bg: rgba(245, 158, 11, 0.12);
+      --rose: #ef4444;
+      --rose-bg: rgba(239, 68, 68, 0.12);
+      --purple: #8b5cf6;
+      --purple-bg: rgba(139, 92, 246, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', 'Segoe UI', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 1.25rem; line-height: 1.55; }
+    .container { max-width: 1420px; margin: 0 auto; }
+
+    /* Top Header */
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem; padding: 1rem 1.35rem;
+      background: var(--surface); border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 1rem; margin-bottom: 1rem;
+    }
+    .brand-title { display: flex; align-items: center; gap: 0.85rem; }
+    .brand-logo { width: 46px; height: 46px; border-radius: 0.65rem; border: 1px solid var(--gold); object-fit: cover; }
+    .badge {
+      font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 999px; font-weight: 700;
+      background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .badge.gold { background: var(--gold-bg); color: var(--gold-light); border-color: rgba(212, 175, 55, 0.4); }
+    .badge.emerald { background: var(--emerald-bg); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+    .badge.amber { background: var(--amber-bg); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
+    .badge.purple { background: var(--purple-bg); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.3); }
+    .badge.rose { background: var(--rose-bg); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+
+    .top-actions { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+    button, .btn {
+      background: var(--surface-2); color: var(--text); border: 1px solid var(--border);
+      padding: 0.55rem 0.95rem; border-radius: 0.55rem; cursor: pointer; font-size: 0.84rem;
+      font-weight: 700; transition: all 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    button:hover, .btn:hover { background: var(--surface-hover); border-color: var(--gold); }
+    button.gold {
+      background: linear-gradient(135deg, #e5c158 0%, #b88b28 100%);
+      border-color: var(--gold); color: #080a0f; font-weight: 900;
+    }
+    button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    button.success { background: var(--emerald); border-color: var(--emerald); color: #022c22; }
+    button.purple { background: var(--purple); border-color: var(--purple); color: #fff; }
+    button.sm { padding: 0.35rem 0.65rem; font-size: 0.78rem; }
+
+    /* System Health & Quota Bar */
+    .health-quota-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem; margin-bottom: 1.15rem;
+    }
+    .hq-item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem;
+      padding: 0.75rem 1rem; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hq-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+    .hq-val { font-size: 0.9rem; font-weight: 800; color: #fff; }
+    .mini-progress { width: 100%; height: 5px; background: #1e293b; border-radius: 999px; overflow: hidden; margin-top: 0.4rem; }
+    .mini-fill { height: 100%; background: var(--gold); transition: width 0.3s; }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 0.85rem; margin-bottom: 1.25rem;
+    }
+    .kpi-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 0.8rem;
+      padding: 1rem 1.1rem;
+    }
+    .kpi-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.3rem; display: flex; justify-content: space-between; }
+    .kpi-val { font-size: 1.65rem; font-weight: 900; color: #fff; }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex; gap: 0.35rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem;
+      overflow-x: auto; padding-bottom: 0.15rem;
+    }
+    .nav-tab {
+      padding: 0.65rem 1rem; cursor: pointer; border-bottom: 2px solid transparent;
+      color: var(--muted); font-weight: 700; font-size: 0.86rem; white-space: nowrap; transition: all 0.15s;
+    }
+    .nav-tab:hover { color: #fff; }
+    .nav-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); background: rgba(212,175,55,0.06); border-radius: 0.5rem 0.5rem 0 0; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 0.85rem;
+      padding: 1.25rem; margin-bottom: 1.25rem;
+    }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .card-header h3 { font-size: 1.08rem; font-weight: 800; color: var(--gold-light); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    th, td { padding: 0.75rem 0.8rem; text-align: right; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 700; font-size: 0.78rem; background: rgba(255,255,255,0.02); }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+
+    input, select, textarea {
+      background: #0b0e16; border: 1px solid var(--border); color: var(--text);
+      padding: 0.6rem 0.85rem; border-radius: 0.5rem; font-size: 0.86rem; width: 100%;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
+    .form-group label { font-size: 0.8rem; color: var(--muted); font-weight: 700; }
+
+    .draft-card {
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 0.75rem;
+      padding: 1.1rem; margin-bottom: 0.85rem;
+    }
+    .draft-body {
+      background: #0b0e16; border: 1px solid var(--border); border-radius: 0.5rem;
+      padding: 0.85rem; white-space: pre-wrap; font-size: 0.86rem; margin-bottom: 0.75rem;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px); z-index: 300; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 1rem;
+      width: 100%; max-width: 720px; padding: 1.65rem; max-height: 92vh; overflow-y: auto;
+    }
+
+    #toast {
+      position: fixed; bottom: 1.5rem; left: 1.5rem; background: #1e293b; color: #fff;
+      border: 1px solid var(--gold); padding: 0.85rem 1.25rem; border-radius: 0.65rem;
+      font-size: 0.88rem; font-weight: 700; display: none; z-index: 400; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand-title">
+        <a href="/"><img src="/assets/logo.jpg" alt="NUDHUJ" class="brand-logo" /></a>
+        <div>
+          <div style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap;">
+            <span style="font-size:1.25rem; font-weight:900; color:var(--gold-light);" id="orgTitleBrand">نضج | NUDHUJ AutoDeal OS</span>
+            <span class="badge gold" id="planTierBadge">STARTER FREE</span>
+            <span class="badge emerald" id="modeBadge">Dry-Run الآمن</span>
+          </div>
+          <div style="font-size:0.78rem; color:var(--muted);" id="companySubtitleText">نظام التشغيل الذاتي للمبيعات والعروض الفنية والمالية التفاعلية • autodeal.nudhuj.com</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button onclick="openOnboardingWizard()">🧭 معالج التهيئة السريعة</button>
+        <button class="gold" onclick="openScoutModal()">🚀 تشغيل دورة استكشاف وصياغة</button>
+        <button class="success" onclick="approveAllPending()">✅ اعتماد المسودات</button>
+        <button class="purple" onclick="triggerSender()">📤 إرسال المعتمد الآن</button>
+        <a href="/" class="btn">🌐 الموقع الرئيسي</a>
+      </div>
+    </header>
+
+    <!-- System Readiness & SaaS Quota Bar -->
+    <div class="health-quota-bar">
+      <div class="hq-item">
+        <div class="hq-top"><span>🧠 الذكاء الاصطناعي</span><span id="healthAiDot">🟢 جاهز</span></div>
+        <div class="hq-val" id="healthAiLabel">Gemini 3.8 Flash</div>
+      </div>
+      <div class="hq-item">
+        <div class="hq-top"><span>🏢 هوية الشركة والخدمات</span><span id="healthCompanyDot">🟢 مكتملة</span></div>
+        <div class="hq-val" id="healthCompanyLabel">نضج لحلول الأعمال</div>
+      </div>
+      <div class="hq-item">
+        <div class="hq-top"><span>🎯 رصيد العملاء (Leads Quota)</span><span id="quotaLeadsText">0 / 25</span></div>
+        <div class="mini-progress"><div class="mini-fill" id="quotaLeadsFill" style="width:10%;"></div></div>
+      </div>
+      <div class="hq-item">
+        <div class="hq-top"><span>📧 رصيد الإيميلات (Emails Quota)</span><span id="quotaEmailsText">0 / 50</span></div>
+        <div class="mini-progress"><div class="mini-fill" id="quotaEmailsFill" style="width:10%;"></div></div>
+      </div>
+      <div class="hq-item">
+        <div class="hq-top"><span>💎 رصيد العروض (Proposals Quota)</span><span id="quotaPropsText">0 / 3</span></div>
+        <div class="mini-progress"><div class="mini-fill" id="quotaPropsFill" style="width:10%;"></div></div>
+      </div>
+    </div>
+
+    <!-- KPI Grid -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label"><span>إجمالي العملاء المحتملين</span><span>🔍</span></div>
+        <div class="kpi-val" id="kpiLeads">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>متوسط نقاط المطابقة (ICP)</span><span>🎯</span></div>
+        <div class="kpi-val" id="kpiScore">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>مسودات بانتظار الموافقة</span><span>⏳</span></div>
+        <div class="kpi-val" id="kpiPending" style="color:var(--amber);">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>الرسائل المرسلة</span><span>📤</span></div>
+        <div class="kpi-val" id="kpiSent" style="color:#60a5fa;">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>العروض التفاعلية المصدرة</span><span>💎</span></div>
+        <div class="kpi-val" id="kpiProposals" style="color:var(--gold-light);">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label"><span>الاجتماعات والصفقات</span><span>🤝</span></div>
+        <div class="kpi-val" id="kpiMeetings" style="color:var(--emerald);">0</div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <div class="nav-tab active" onclick="switchNavTab('leads', this)">🔍 العملاء والاستكشاف (Leads & Scout)</div>
+      <div class="nav-tab" onclick="switchNavTab('ladder', this)">🚦 سلم الموافقات (Approval Ladder)</div>
+      <div class="nav-tab" onclick="switchNavTab('outbox', this)">📤 طابور الإرسال والطيار الآلي</div>
+      <div class="nav-tab" onclick="switchNavTab('inbox', this)">📥 الردود وإيقاف المتابعات</div>
+      <div class="nav-tab" onclick="switchNavTab('proposals', this)">💎 العروض الفنية والمالية التفاعلية</div>
+      <div class="nav-tab" onclick="switchNavTab('company', this)">🏢 هوية الشركة وكتالوج الخدمات</div>
+      <div class="nav-tab" onclick="switchNavTab('settings', this)">⚙️ مركز الإعدادات الشامل</div>
+      <div class="nav-tab" onclick="switchNavTab('billing', this)">💳 الباقات وإدارة المشتركين</div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: Leads & Dynamic Scout -->
+    <!-- ========================================== -->
+    <section id="panel-leads" class="tab-panel active">
+      <div class="card">
+        <div class="card-header">
+          <h3>قائمة العملاء المحتملين وتأهيل الـ ICP لأي قطاع</h3>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <input type="text" id="leadSearchInput" placeholder="بحث باسم الشركة أو القطاع..." oninput="filterLeadsTable()" style="width:220px;" />
+            <button class="gold" onclick="openScoutModal()">🔍 استكشاف عملاء في أي قطاع</button>
+            <button class="primary" onclick="runWriterForAll()">✍️ كتابة سلاسل البريد للمؤهلين</button>
+            <button onclick="openManualLeadModal()">➕ إضافة عميل يدوياً</button>
+            <button onclick="openCsvModal()">📂 استيراد CSV</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>الشركة والقطاع</th>
+                <th>المسؤول والبريد</th>
+                <th>تقييم ICP</th>
+                <th>نقاط الألم والافتتاحية</th>
+                <th>الحالة</th>
+                <th>العرض التفاعلي</th>
+                <th>إجراءات سريعة</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: Approval Ladder -->
+    <!-- ========================================== -->
+    <section id="panel-ladder" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <h3>سلم الموافقات (مراجعة، تعديل، واعتماد الرسائل قبل الإرسال)</h3>
+          <div style="display:flex; gap:0.5rem;">
+            <select id="ladderFilter" onchange="renderLadderDrafts(window._lastData.drafts, window._lastData.leads)" style="width:190px;">
+              <option value="pending">بانتظار الموافقة (Pending)</option>
+              <option value="approved">المعتمدة (Approved)</option>
+              <option value="sent">المرسلة (Sent)</option>
+              <option value="all">جميع المسودات</option>
+            </select>
+            <button class="success" onclick="approveAllPending()">✅ اعتماد الكل دفعة واحدة</button>
+          </div>
+        </div>
+        <div id="ladderContainer"></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: Outbox & Autopilot Scheduler -->
+    <!-- ========================================== -->
+    <section id="panel-outbox" class="tab-panel">
+      <div class="form-grid" style="margin-bottom:1.25rem;">
+        <div class="card" style="margin:0;">
+          <div class="card-header">
+            <h3>🤖 محرك الطيار الآلي والجدولة الذاتية (Autopilot Engine)</h3>
+            <button class="gold sm" onclick="runAutopilotCycleNow()">⚡ تشغيل دورة الطيار الآلي الآن</button>
+          </div>
+          <p style="font-size:0.86rem; color:var(--muted); margin-bottom:0.85rem;">
+            يقوم الطيار الآلي بإرسال الرسائل المعتمدة ضمن ساعات العمل المحددة، ومراقبة صندوق الوارد لإيقاف المتابعات فور رد العميل.
+          </p>
+          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:0.5rem; font-weight:700; cursor:pointer;">
+              <input type="checkbox" id="autopilotToggle" onchange="toggleAutopilot(this.checked)" style="width:18px; height:18px;" />
+              تفعيل الطيار الآلي الخلفي المستمر
+            </label>
+            <span class="badge emerald" id="autopilotCyclesBadge">الدورات المنفذة: 0</span>
+          </div>
+        </div>
+
+        <div class="card" style="margin:0;">
+          <div class="card-header">
+            <h3>📜 سجل العمليات الحي للوكلاء (Live Activity Log)</h3>
+          </div>
+          <div id="activityLogsBox" style="max-height:140px; overflow-y:auto; font-size:0.82rem; display:grid; gap:0.4rem;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>طابور الرسائل المجدولة والمرسلة</h3>
+          <button class="purple" onclick="triggerSender()">📤 إرسال الدفعة المعتمدة الآن</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>العميل</th>
+                <th>البريد المستهدف</th>
+                <th>الخطوة</th>
+                <th>عنوان الرسالة</th>
+                <th>الحالة</th>
+                <th>موعد الجدولة / الإرسال</th>
+              </tr>
+            </thead>
+            <tbody id="outboxTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: Inbox & Reply Handler -->
+    <!-- ========================================== -->
+    <section id="panel-inbox" class="tab-panel">
+      <div class="form-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>🧪 محاكي استلام ردود العملاء واختبار Stop-on-Reply</h3>
+          </div>
+          <div class="form-group">
+            <label>اختر العميل الذي يرسل الرد:</label>
+            <select id="sandboxLeadSelect"></select>
+          </div>
+          <div class="form-group">
+            <label>قوالب ردود جاهزة للمحاكاة السريعة:</label>
+            <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+              <button class="sm" onclick="setReplyPreset('interested')">😍 عميل مهتم باجتماع</button>
+              <button class="sm" onclick="setReplyPreset('question')">❓ استفسار عن الأسعار</button>
+              <button class="sm" onclick="setReplyPreset('objection')">⏳ مرتبطون بعقد حالي</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>نص رسالة العميل الواردة:</label>
+            <textarea id="sandboxReplyBody" rows="4">نعم نحن مهتمون جداً بالحلول التي تقدمونها، هل يمكننا تحديد موعد اجتماع هذا الأسبوع لمناقشة التفاصيل والأسعار؟</textarea>
+          </div>
+          <button class="gold" onclick="simulateIncomingReply()">📥 معالجة الرد وتصنيف النية وإيقاف المتابعات</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>الردود الواردة واقتراحات الوكيل الذكي</h3>
+          </div>
+          <div id="inboxListContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: Unified Interactive Proposals Studio -->
+    <!-- ========================================== -->
+    <section id="panel-proposals" class="tab-panel">
+      <div class="card" style="border-color:rgba(212,175,55,0.4);">
+        <div class="card-header">
+          <div>
+            <h3>💎 استوديو العروض الفنية والمالية التفاعلية الموحد (Turnkey Proposals Engine)</h3>
+            <p style="font-size:0.84rem; color:var(--muted);">يولّد عروضاً تفاعلية محمية مبنية على هوية شركتك وكتالوج خدماتك على نفس الدومين (`/c/slug`).</p>
+          </div>
+          <button class="gold" onclick="openProposalModal()">✨ توليد عرض تفاعلي جديد من مكالمة أو ملاحظات</button>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>العميل</th>
+                <th>عنوان العرض والقطاع</th>
+                <th>صافي القيمة الشاملة</th>
+                <th>عدد المشاهدات</th>
+                <th>الحالة والاعتماد</th>
+                <th>رابط العرض التفاعلي الموحد</th>
+              </tr>
+            </thead>
+            <tbody id="proposalsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: Company Identity & Services Catalog -->
+    <!-- ========================================== -->
+    <section id="panel-company" class="tab-panel">
+      <div class="card" style="border-color:var(--gold);">
+        <div class="card-header">
+          <div>
+            <h3>🧠 المحرك الذكي للتعرف على نشاط وأهداف شركتك (Universal Company Profiler)</h3>
+            <p style="font-size:0.84rem; color:var(--muted);">أدخل رابط موقع شركتك أو الصق نبذة/ملف التعريف، ليقوم الذكاء الاصطناعي باستخراج الهوية وعروض القيمة وكتالوج الخدمات تلقائياً.</p>
+          </div>
+          <button class="gold" onclick="runSmartCompanyProfiler()">✨ تحليل الموقع والنص وتوليد هوية الشركة تلقائياً</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>اسم الشركة (بالعربية):</label>
+            <input type="text" id="profCompanyNameAr" placeholder="مثال: شركة آفاق للاستشارات والحلول" />
+          </div>
+          <div class="form-group">
+            <label>نشاط الشركة / القطاع الدقيق:</label>
+            <input type="text" id="profIndustry" placeholder="مثال: الاستشارات القانونية، البرمجيات، المقاولات، الأجهزة..." />
+          </div>
+          <div class="form-group">
+            <label>رابط موقع الشركة (لفحصه تلقائياً):</label>
+            <input type="text" id="profWebsite" placeholder="https://yourcompany.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>نبذة تفصيلية أو نص الملف التعريفي للشركة (Company Profile / Brochure Text) أو ارفع ملف نصي:</label>
+          <textarea id="profRawText" rows="3" placeholder="اكتب أو الصق هنا نبذة عن شركتك، خدماتك، عملائك المستهدفين، أو ارفع ملف تعريف..."></textarea>
+          <div style="margin-top:0.4rem;">
+            <input type="file" id="profFileInput" accept=".txt,.md,.csv,.json" onchange="loadProfileFileText(this)" style="width:auto;" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>🏢 بيانات هوية الشركة وعروض القيمة والجمهور المستهدف</h3>
+          <button class="success" onclick="saveCompanyProfileManual()">💾 حفظ هوية الشركة والكتالوج</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>الاسم الإنجليزي للشركة:</label>
+            <input type="text" id="profCompanyNameEn" />
+          </div>
+          <div class="form-group">
+            <label>الشعار اللفظي (Tagline):</label>
+            <input type="text" id="profTaglineAr" />
+          </div>
+          <div class="form-group">
+            <label>المسمى الوظيفي للمرسل (Sender Persona AR):</label>
+            <input type="text" id="profPersonaAr" />
+          </div>
+          <div class="form-group">
+            <label>العملة المعتمدة للعروض:</label>
+            <select id="profCurrency">
+              <option value="SAR">ريال سعودي (SAR)</option>
+              <option value="AED">درهم إماراتي (AED)</option>
+              <option value="USD">دولار أمريكي (USD)</option>
+              <option value="EGP">جنيه مصري (EGP)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>عرض القيمة التنافسية (Value Proposition - بالعربية):</label>
+            <textarea id="profValueAr" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>عرض القيمة التنافسية (Value Proposition - بالإنجليزية):</label>
+            <textarea id="profValueEn" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>القطاعات المستهدفة (كل قطاع في سطر):</label>
+            <textarea id="profTargetIndustries" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>شروط الضمان واتفاقية مستوى الخدمة (تظهر في العروض):</label>
+            <textarea id="profWarrantyAr" rows="3"></textarea>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border); margin:1.25rem 0;" />
+        <div class="card-header">
+          <h3>📦 كتالوج خدمات وباقات وأسعار الشركة (يغذي العروض التفاعلية تلقائياً)</h3>
+          <button class="sm gold" onclick="addCatalogServiceRow()">➕ إضافة خدمة أو باقة جديدة</button>
+        </div>
+        <div id="catalogServicesContainer"></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: Unified Comprehensive Settings Center -->
+    <!-- ========================================== -->
+    <section id="panel-settings" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3>⚙️ مركز الإعدادات الشامل واختبارات الاتصال المباشرة</h3>
+            <p style="font-size:0.84rem; color:var(--muted);">جميع الإعدادات التي يحتاجها المستخدم العادي قبل وأثناء العمل مع حفظ دائم وفحص فوري للاتصال.</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button onclick="testAiConnectionBtn()">🔌 فحص اتصال الذكاء الاصطناعي</button>
+            <button onclick="testEmailConnectionBtn()">📧 فحص اتصال البريد SMTP/IMAP</button>
+            <button class="gold" onclick="saveSettings()">💾 حفظ كافة الإعدادات بشكل دائم</button>
+          </div>
+        </div>
+
+        <div id="diagnosticsResultBox" style="display:none; padding:0.9rem 1.1rem; border-radius:0.65rem; background:var(--surface-2); border:1px solid var(--gold); margin-bottom:1.25rem; font-size:0.88rem;"></div>
+
+        <h4 style="color:var(--gold-light); margin-bottom:0.75rem;">1. إعدادات محرك الذكاء الاصطناعي (AI Engine Configuration)</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>مزود الذكاء الاصطناعي (AI Provider):</label>
+            <select id="cfgProvider">
+              <option value="gemini">Google Gemini (الموصى به)</option>
+              <option value="openai">OpenAI (GPT-4o)</option>
+              <option value="ollama">Ollama (محلي Llama 3)</option>
+              <option value="claude_cli">Claude Code CLI</option>
+              <option value="mock">وضع المحاكاة الذكي الفوري (Offline Smart Mode)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>اسم النموذج (Model):</label>
+            <input type="text" id="cfgModel" value="gemini-3.8-flash" />
+          </div>
+          <div class="form-group">
+            <label>مفتاح Gemini API Key:</label>
+            <input type="password" id="cfgGeminiKey" placeholder="أدخل مفتاح GEMINI_API_KEY..." />
+          </div>
+          <div class="form-group">
+            <label>مفتاح OpenAI API Key (اختياري):</label>
+            <input type="password" id="cfgOpenaiKey" placeholder="sk-..." />
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border); margin:1.25rem 0;" />
+        <h4 style="color:var(--gold-light); margin-bottom:0.75rem;">2. إعدادات خادم البريد الصادر والوارد (SMTP & IMAP Servers)</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>وضع الإرسال (Dry-Run Safety Mode):</label>
+            <select id="cfgDryRun">
+              <option value="true">🛡️ وضع المحاكاة الآمن (Dry-Run - لا يرسل بريداً فعلياً)</option>
+              <option value="false">🚀 وضع الإرسال الحي الفعلي (Live Production SMTP)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>اسم المرسل الظاهر للعملاء:</label>
+            <input type="text" id="cfgSenderName" />
+          </div>
+          <div class="form-group">
+            <label>البريد الإلكتروني للمرسل:</label>
+            <input type="email" id="cfgSenderEmail" />
+          </div>
+          <div class="form-group">
+            <label>رابط حجز الاجتماعات (Calendly / Google Meet):</label>
+            <input type="text" id="cfgCalendarLink" />
+          </div>
+          <div class="form-group">
+            <label>خادم البريد الصادر (SMTP Host):</label>
+            <input type="text" id="cfgSmtpHost" value="smtp.gmail.com" />
+          </div>
+          <div class="form-group">
+            <label>منفذ SMTP Port:</label>
+            <input type="number" id="cfgSmtpPort" value="587" />
+          </div>
+          <div class="form-group">
+            <label>اسم مستخدم SMTP:</label>
+            <input type="text" id="cfgSmtpUser" />
+          </div>
+          <div class="form-group">
+            <label>كلمة مرور التطبيقات (SMTP App Password):</label>
+            <input type="password" id="cfgSmtpPass" placeholder="••••••••" />
+          </div>
+          <div class="form-group">
+            <label>خادم البريد الوارد (IMAP Host):</label>
+            <input type="text" id="cfgImapHost" value="imap.gmail.com" />
+          </div>
+          <div class="form-group">
+            <label>منفذ IMAP Port:</label>
+            <input type="number" id="cfgImapPort" value="993" />
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border); margin:1.25rem 0;" />
+        <h4 style="color:var(--gold-light); margin-bottom:0.75rem;">3. سياسات الإرسال، أوقات العمل، وضوابط الكتابة (Pacing & Guardrails)</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>الحد الأقصى للإرسال اليومي (Daily Cap):</label>
+            <input type="number" id="cfgDailyCap" value="40" />
+          </div>
+          <div class="form-group">
+            <label>الحد الأدنى لنقاط تأهيل العميل (Min ICP Score 0-100):</label>
+            <input type="number" id="cfgMinScore" value="65" />
+          </div>
+          <div class="form-group">
+            <label>بداية نافذة الإرسال اليومية (الساعة صباحاً):</label>
+            <input type="number" id="cfgWindowStart" value="9" />
+          </div>
+          <div class="form-group">
+            <label>نهاية نافذة الإرسال اليومية (الساعة مساءً):</label>
+            <input type="number" id="cfgWindowEnd" value="17" />
+          </div>
+          <div class="form-group">
+            <label>الحد الأقصى لكلمات الرسالة الأولى:</label>
+            <input type="number" id="cfgMaxWords1" value="75" />
+          </div>
+          <div class="form-group">
+            <label>الاعتماد التلقائي لسلاسل البريد (Auto-Approve):</label>
+            <select id="cfgAutoApprove">
+              <option value="false">يتطلب مراجعة وموافقة بشرية (موصى به)</option>
+              <option value="true">اعتماد تلقائي فوري (Full Autopilot)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>الكلمات المبتذلة المحظورة (عربي - كل عبارة في سطر):</label>
+            <textarea id="cfgBuzzAr" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>الكلمات المبتذلة المحظورة (إنجليزي - كل عبارة في سطر):</label>
+            <textarea id="cfgBuzzEn" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 8: SaaS Billing & Super Admin -->
+    <!-- ========================================== -->
+    <section id="panel-billing" class="tab-panel">
+      <div class="card" style="border-color:var(--gold);">
+        <div class="card-header">
+          <div>
+            <h3>💳 إدارة باقة الاشتراك والترقية الفورية (SaaS Subscription & Quotas)</h3>
+            <p style="font-size:0.84rem; color:var(--muted);">رقِّ باقتك في أي وقت لرفع سقف العملاء والرسائل والعروض وتفعيل الـ White-Label.</p>
+          </div>
+        </div>
+        <div class="form-grid" id="billingPlansGrid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>👑 لوحة إدارة المنصة العليا (Super Admin — الشركات المشتركة على المنصة)</h3>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>اسم الشركة المشتركة</th>
+                <th>القطاع</th>
+                <th>الباقة الحالية</th>
+                <th>استهلاك العملاء</th>
+                <th>استهلاك الرسائل</th>
+                <th>استهلاك العروض</th>
+                <th>ترقية فورية</th>
+              </tr>
+            </thead>
+            <tbody id="tenantsAdminTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 1: Dynamic Scout & Pipeline Run -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="scoutModal">
+    <div class="modal">
+      <div class="card-header">
+        <h3>🔍 استكشاف عملاء محتملين وتشغيل دورة المبيعات</h3>
+        <button onclick="closeModal('scoutModal')">✕</button>
+      </div>
+      <div class="form-group">
+        <label>اكتب أي قطاع أو نشاط تستهدفه (أو اتركه فارغاً لاستخدام قطاعات شركتك):</label>
+        <input type="text" id="scoutIndustryInput" placeholder="مثال: عيادات الأسنان، شركات المقاولات، المتاجر الإلكترونية، الفنادق..." />
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>المنطقة الجغرافية المستهدفة:</label>
+          <input type="text" id="scoutRegionInput" value="المملكة العربية السعودية" />
+        </div>
+        <div class="form-group">
+          <label>لغة الحملة والرسائل:</label>
+          <select id="scoutLangSelect">
+            <option value="ar">العربية (Arabic)</option>
+            <option value="en">الإنجليزية (English)</option>
+            <option value="both">ثنائي اللغة (Arabic & English)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>عدد الشركات المطلوب استكشافها:</label>
+          <input type="number" id="scoutLimitInput" value="4" min="1" max="20" />
+        </div>
+      </div>
+      <div style="display:flex; gap:0.65rem; justify-content:flex-end; margin-top:1rem;">
+        <button onclick="closeModal('scoutModal')">إلغاء</button>
+        <button class="gold" onclick="executePipelineRun()">🚀 ابدأ الاستكشاف والتأهيل والصياغة الآن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 2: Smart Proposal Generator -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="proposalModal">
+    <div class="modal">
+      <div class="card-header">
+        <h3>💎 توليد عرض فني ومالي تفاعلي مخصص للعميل</h3>
+        <button onclick="closeModal('proposalModal')">✕</button>
+      </div>
+      <div class="form-group">
+        <label>اختر العميل:</label>
+        <select id="propLeadSelect"></select>
+      </div>
+      <div class="form-group">
+        <label>ملخص أو تفريغ مكالمة المبيعات / احتياجات العميل:</label>
+        <textarea id="propTranscriptInput" rows="4">تم الاجتماع مع إدارة الشركة، وهم بحاجة إلى تنفيذ الحل المتكامل لعدد 2 فرع كمرحلة أولى عاجلة، مع رغبتهم في باقة دعم فني شاملة وجدول دفعات مرن.</textarea>
+      </div>
+      <div class="form-group">
+        <label>ملاحظات إضافية أو شروط خاصة:</label>
+        <input type="text" id="propNotesInput" placeholder="مثال: خصم خاص 10% للتعاقد هذا الأسبوع..." />
+      </div>
+      <div style="display:flex; gap:0.65rem; justify-content:flex-end; margin-top:1rem;">
+        <button onclick="closeModal('proposalModal')">إلغاء</button>
+        <button class="gold" onclick="submitGenerateProposal()">✨ توليد العرض التفاعلي ومسودة الإيميل</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 3: 3-Step Onboarding Wizard -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="onboardingModal">
+    <div class="modal">
+      <div class="card-header">
+        <h3>🧭 معالج التهيئة السريعة لشركتك في 3 خطوات (Onboarding Wizard)</h3>
+        <button onclick="closeModal('onboardingModal')">✕</button>
+      </div>
+      <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+        أدخل بيانات شركتك الأساسية وسيقوم الذكاء الاصطناعي بتجهيز ملف العميل المثالي (ICP) وكتالوج خدماتك وأسعارك تلقائياً.
+      </p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>1. اسم شركتك:</label>
+          <input type="text" id="wizCompanyName" placeholder="مثال: شركة نضج للاستشارات والتقنية" />
+        </div>
+        <div class="form-group">
+          <label>2. نشاط الشركة والخدمات التي تبيعها:</label>
+          <input type="text" id="wizIndustry" placeholder="مثال: تطوير البرمجيات، الاستشارات المالية، التوريد..." />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>3. رابط موقعك أو وصف مختصر لما تقدمه لعملائك:</label>
+        <textarea id="wizDescription" rows="3" placeholder="نقدم خدمات وحلول متكاملة للشركات في مجال..."></textarea>
+      </div>
+      <div style="display:flex; gap:0.65rem; justify-content:flex-end; margin-top:1rem;">
+        <button onclick="closeModal('onboardingModal')">تخطي الآن</button>
+        <button class="gold" onclick="completeOnboardingWizard()">🚀 تحليل النشاط وحفظ الهوية وبدء أول حملة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 4: Manual Lead Modal & CSV Modal -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="manualLeadModal">
+    <div class="modal">
+      <div class="card-header">
+        <h3>➕ إضافة عميل محتمل جديد يدوياً</h3>
+        <button onclick="closeModal('manualLeadModal')">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>اسم الشركة:</label><input type="text" id="mlCompany" /></div>
+        <div class="form-group"><label>الموقع الإلكتروني:</label><input type="text" id="mlWebsite" placeholder="https://..." /></div>
+        <div class="form-group"><label>القطاع:</label><input type="text" id="mlIndustry" /></div>
+        <div class="form-group"><label>المنطقة:</label><input type="text" id="mlRegion" value="المملكة العربية السعودية" /></div>
+        <div class="form-group"><label>اسم المسؤول:</label><input type="text" id="mlContact" /></div>
+        <div class="form-group"><label>المنصب:</label><input type="text" id="mlRole" /></div>
+        <div class="form-group"><label>البريد الإلكتروني:</label><input type="email" id="mlEmail" /></div>
+        <div class="form-group">
+          <label>اللغة:</label>
+          <select id="mlLang"><option value="ar">العربية</option><option value="en">English</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>نبذة عن الشركة:</label><textarea id="mlSummary" rows="2"></textarea></div>
+      <div style="display:flex; gap:0.65rem; justify-content:flex-end; margin-top:1rem;">
+        <button onclick="closeModal('manualLeadModal')">إلغاء</button>
+        <button class="gold" onclick="submitManualLead()">حفظ وتأهيل العميل</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="csvModal">
+    <div class="modal">
+      <div class="card-header">
+        <h3>📂 استيراد قائمة عملاء من ملف CSV</h3>
+        <button onclick="closeModal('csvModal')">✕</button>
+      </div>
+      <div class="form-group">
+        <label>اختر ملف CSV:</label>
+        <input type="file" id="csvFileInput" accept=".csv" />
+      </div>
+      <div style="display:flex; gap:0.65rem; justify-content:flex-end; margin-top:1rem;">
+        <button onclick="closeModal('csvModal')">إلغاء</button>
+        <button class="gold" onclick="submitCsvImport()">استيراد وتأهيل القائمة</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    window._lastData = { leads: [], drafts: [], replies: [], proposals: [], catalog: [] };
+
+    function getAuthHeaders() {
+      const token = localStorage.getItem('autodeal_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      return headers;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+
+    function switchNavTab(tabId, el) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      if (el) el.classList.add('active');
+      const panel = document.getElementById('panel-' + tabId);
+      if (panel) panel.classList.add('active');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function openScoutModal() { openModal('scoutModal'); }
+    function openManualLeadModal() { openModal('manualLeadModal'); }
+    function openCsvModal() { openModal('csvModal'); }
+    function openOnboardingWizard() { openModal('onboardingModal'); }
+
+    function openProposalModal(leadId) {
+      populateProposalLeadsSelect(window._lastData.leads, leadId);
+      openModal('proposalModal');
+    }
+
+    async function refreshData() {
+      try {
+        const res = await fetch('/api/overview', { headers: getAuthHeaders() });
+        const data = await res.json();
+        window._lastData = data;
+
+        // Organization & Quotas
+        if (data.organization) {
+          const org = data.organization;
+          document.getElementById('orgTitleBrand').textContent = org.name || 'نضج | NUDHUJ AutoDeal OS';
+          document.getElementById('planTierBadge').textContent = (org.plan_tier || 'free').toUpperCase() + ' PLAN';
+          document.getElementById('quotaLeadsText').textContent = `${org.leads_used} / ${org.leads_quota}`;
+          document.getElementById('quotaLeadsFill').style.width = `${Math.min(100, (org.leads_used / Math.max(1, org.leads_quota)) * 100)}%`;
+          document.getElementById('quotaEmailsText').textContent = `${org.emails_used} / ${org.emails_quota}`;
+          document.getElementById('quotaEmailsFill').style.width = `${Math.min(100, (org.emails_used / Math.max(1, org.emails_quota)) * 100)}%`;
+          document.getElementById('quotaPropsText').textContent = `${org.proposals_used} / ${org.proposals_quota}`;
+          document.getElementById('quotaPropsFill').style.width = `${Math.min(100, (org.proposals_used / Math.max(1, org.proposals_quota)) * 100)}%`;
+        }
+
+        // System Health
+        if (data.health) {
+          document.getElementById('healthAiLabel').textContent = data.health.ai_engine.label_ar;
+          document.getElementById('healthCompanyLabel').textContent = data.health.company_identity.label_ar;
+          document.getElementById('autopilotToggle').checked = Boolean(data.health.autopilot.enabled);
+        }
+
+        // KPIs
+        const a = data.analytics || {};
+        document.getElementById('kpiLeads').textContent = a.total_leads || 0;
+        document.getElementById('kpiScore').textContent = a.average_icp_score || 0;
+        document.getElementById('kpiPending').textContent = a.drafts_pending_approval || 0;
+        document.getElementById('kpiSent').textContent = a.emails_sent || 0;
+        document.getElementById('kpiProposals').textContent = (data.proposals || []).length;
+        document.getElementById('kpiMeetings').textContent = a.meetings_booked || 0;
+
+        renderLeadsTable(data.leads || []);
+        renderLadderDrafts(data.drafts || [], data.leads || []);
+        renderOutboxTable(data.drafts || [], data.leads || []);
+        renderInboxList(data.replies || []);
+        renderProposalsTable(data.proposals || [], data.leads || []);
+        renderActivityLogs(data.activity_logs || []);
+        populateSandboxLeadSelect(data.leads || []);
+        renderBillingAndTenants(data.plans || {}, data.organization || {}, data.all_organizations || []);
+        await loadSettingsIntoForm();
+      } catch (err) {
+        console.error('Refresh error:', err);
+      }
+    }
+
+    function renderLeadsTable(leads) {
+      const tbody = document.getElementById('leadsTableBody');
+      const q = (document.getElementById('leadSearchInput').value || '').toLowerCase();
+      const filtered = leads.filter(l =>
+        !q || (l.company_name || '').toLowerCase().includes(q) || (l.industry || '').toLowerCase().includes(q)
+      );
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:2rem; color:var(--muted);">لا يوجد عملاء حالياً. اضغط على "استكشاف عملاء في أي قطاع" للبدء.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = filtered.map(l => `
+        <tr>
+          <td>#${l.id}</td>
+          <td>
+            <strong>${l.company_name}</strong>
+            <div style="font-size:0.76rem; color:var(--muted);">${l.industry} • ${l.region}</div>
+          </td>
+          <td>
+            <div>${l.contact_name || '-'} (${l.contact_role || '-'})</div>
+            <div style="font-size:0.76rem; color:#60a5fa;">${l.contact_email} ${l.email_verified ? '✅' : ''}</div>
+          </td>
+          <td><span class="badge ${l.qualification_score >= 70 ? 'emerald' : 'amber'}">${l.qualification_score}/100</span></td>
+          <td style="max-width:260px; font-size:0.78rem; color:#cbd5e1;">${l.personalization_hook || l.company_summary || '-'}</td>
+          <td><span class="badge">${l.status}</span></td>
+          <td>
+            ${l.proposal_url
+              ? `<a href="${l.proposal_url}" target="_blank" class="badge gold">🔗 فتح العرض التفاعلي</a>`
+              : `<button class="sm" onclick="openProposalModal(${l.id})">💎 إصدار عرض</button>`}
+          </td>
+          <td>
+            <div style="display:flex; gap:0.3rem;">
+              <button class="sm" onclick="enrichSingleLead(${l.id})" title="تقييم">🛡️</button>
+              <button class="sm primary" onclick="writeSingleLead(${l.id})" title="كتابة الإيميلات">✍️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterLeadsTable() {
+      renderLeadsTable(window._lastData.leads || []);
+    }
+
+    function renderLadderDrafts(drafts, leads) {
+      const filter = document.getElementById('ladderFilter').value;
+      const leadMap = Object.fromEntries((leads || []).map(l => [l.id, l]));
+      const filtered = (drafts || []).filter(d => filter === 'all' || d.approval_status === filter);
+      const container = document.getElementById('ladderContainer');
+      if (!filtered.length) {
+        container.innerHTML = `<div style="padding:1.5rem; text-align:center; color:var(--muted);">لا توجد مسودات في هذا التصنيف.</div>`;
+        return;
+      }
+      container.innerHTML = filtered.map(d => {
+        const lead = leadMap[d.lead_id] || {};
+        return `
+          <div class="draft-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap;">
+              <div>
+                <span class="badge gold">الخطوة ${d.step_number === 4 ? '4 (عرض فني ومالي)' : d.step_number}</span>
+                <strong style="margin-right:0.5rem;">${lead.company_name || ''} (${lead.contact_email || ''})</strong>
+              </div>
+              <span class="badge">${d.approval_status} • ${d.word_count} كلمة</span>
+            </div>
+            <div style="margin-bottom:0.45rem;">
+              <input type="text" id="subj-${d.id}" value="${(d.subject || '').replace(/"/g, '&quot;')}" />
+            </div>
+            <textarea id="body-${d.id}" rows="4" class="draft-body">${d.body || ''}</textarea>
+            <div style="display:flex; gap:0.5rem; justify-content:flex-end;">
+              <button class="sm success" onclick="updateDraft(${d.id}, 'approve')">✅ حفظ واعتماد</button>
+              <button class="sm" onclick="updateDraft(${d.id}, 'reject')">❌ رفض</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderOutboxTable(drafts, leads) {
+      const leadMap = Object.fromEntries((leads || []).map(l => [l.id, l]));
+      const tbody = document.getElementById('outboxTableBody');
+      const items = (drafts || []).filter(d => d.approval_status === 'approved' || d.approval_status === 'sent');
+      if (!items.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:1.5rem; color:var(--muted);">لا توجد رسائل في طابور الإرسال بعد.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = items.map(d => {
+        const lead = leadMap[d.lead_id] || {};
+        return `
+          <tr>
+            <td><strong>${lead.company_name || '-'}</strong></td>
+            <td>${lead.contact_email || '-'}</td>
+            <td>الخطوة ${d.step_number}</td>
+            <td>${d.subject}</td>
+            <td><span class="badge ${d.approval_status === 'sent' ? 'emerald' : 'amber'}">${d.approval_status}</span></td>
+            <td style="font-size:0.78rem; color:var(--muted);">${d.sent_at || d.scheduled_at || '-'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderActivityLogs(logs) {
+      const box = document.getElementById('activityLogsBox');
+      if (!logs || !logs.length) {
+        box.innerHTML = `<div style="color:var(--muted);">لا توجد أنشطة مسجلة بعد.</div>`;
+        return;
+      }
+      box.innerHTML = logs.map(l => `
+        <div style="padding:0.4rem 0.65rem; background:var(--surface-2); border-radius:0.4rem; display:flex; justify-content:space-between;">
+          <span><strong>[${l.agent_name}]</strong> ${l.action}: ${l.details}</span>
+          <span style="color:var(--muted); font-size:0.74rem;">${(l.created_at || '').slice(11, 19)}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderInboxList(replies) {
+      const box = document.getElementById('inboxListContainer');
+      if (!replies.length) {
+        box.innerHTML = `<div style="color:var(--muted); padding:1rem;">لا توجد ردود واردة حتى الآن.</div>`;
+        return;
+      }
+      box.innerHTML = replies.map(r => `
+        <div class="draft-card">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+            <strong>من: ${r.from_email}</strong>
+            <span class="badge ${r.intent === 'interested' ? 'emerald' : 'amber'}">النية: ${r.intent}</span>
+          </div>
+          <div style="font-size:0.85rem; color:#cbd5e1; margin-bottom:0.6rem;">"${r.body}"</div>
+          <div style="background:#0b0e16; padding:0.7rem; border-radius:0.5rem; border-right:3px solid var(--gold); font-size:0.82rem;">
+            <strong style="color:var(--gold-light);">🤖 الرد المقترح من الوكيل:</strong><br/>
+            ${r.ai_suggested_reply}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderProposalsTable(proposals, leads) {
+      const tbody = document.getElementById('proposalsTableBody');
+      if (!proposals || !proposals.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:1.75rem; color:var(--muted);">لم يتم إصدار عروض بعد. اضغط على "توليد عرض تفاعلي جديد" أعلاه.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = proposals.map(p => `
+        <tr>
+          <td><strong>${p.client_company}</strong><div style="font-size:0.76rem; color:var(--muted);">${p.client_contact || ''}</div></td>
+          <td><strong>${p.title_ar}</strong><div style="font-size:0.76rem; color:var(--muted);">${p.industry || ''}</div></td>
+          <td><strong style="color:var(--gold-light);">${Number(p.total_amount || 0).toLocaleString()} ${p.currency || 'SAR'}</strong></td>
+          <td>👁️ ${p.views_count || 0}</td>
+          <td>
+            <span class="badge ${p.status === 'accepted' ? 'emerald' : 'gold'}">
+              ${p.status === 'accepted' ? '✅ معتمد من (' + p.accepted_by + ')' : p.status}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex; gap:0.4rem;">
+              <a href="/c/${p.slug}" target="_blank" class="btn sm gold">🔗 معاينة العرض (/c/${p.slug})</a>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function populateSandboxLeadSelect(leads) {
+      const sel = document.getElementById('sandboxLeadSelect');
+      sel.innerHTML = (leads || []).map(l =>
+        `<option value="${l.contact_email}">${l.company_name} (${l.contact_email})</option>`
+      ).join('');
+    }
+
+    function populateProposalLeadsSelect(leads, selectedId) {
+      const sel = document.getElementById('propLeadSelect');
+      sel.innerHTML = (leads || []).map(l =>
+        `<option value="${l.id}" ${l.id === selectedId ? 'selected' : ''}>${l.company_name} — ${l.industry}</option>`
+      ).join('');
+    }
+
+    function renderCatalogServicesEditor(catalog) {
+      window._catalogItems = catalog || [];
+      const container = document.getElementById('catalogServicesContainer');
+      if (!window._catalogItems.length) {
+        container.innerHTML = `<div style="color:var(--muted);">لا توجد باقات مضافة.</div>`;
+        return;
+      }
+      container.innerHTML = window._catalogItems.map((s, idx) => `
+        <div class="draft-card" style="display:grid; grid-template-columns: 2fr 2fr 1fr auto; gap:0.75rem; align-items:center;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--muted);">اسم الخدمة / الباقة (عربي):</label>
+            <input type="text" value="${(s.name_ar || '').replace(/"/g, '&quot;')}" onchange="window._catalogItems[${idx}].name_ar = this.value" />
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--muted);">وصف الباقة:</label>
+            <input type="text" value="${(s.description_ar || '').replace(/"/g, '&quot;')}" onchange="window._catalogItems[${idx}].description_ar = this.value" />
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--muted);">السعر الأساسي:</label>
+            <input type="number" value="${s.unit_price || 15000}" onchange="window._catalogItems[${idx}].unit_price = parseFloat(this.value)" />
+          </div>
+          <button class="sm" style="margin-top:1.1rem;" onclick="removeCatalogServiceRow(${idx})">🗑️</button>
+        </div>
+      `).join('');
+    }
+
+    function addCatalogServiceRow() {
+      window._catalogItems = window._catalogItems || [];
+      window._catalogItems.push({
+        id: 'svc-' + Date.now(),
+        name_ar: 'باقة خدمات متكاملة جديدة',
+        name_en: 'New Turnkey Service Package',
+        description_ar: 'توصيف شامل لنطاق العمل والمخرجات التنفيذية.',
+        unit_price: 20000,
+        currency: document.getElementById('profCurrency').value || 'SAR',
+        duration_days: 30
+      });
+      renderCatalogServicesEditor(window._catalogItems);
+    }
+
+    function removeCatalogServiceRow(idx) {
+      window._catalogItems.splice(idx, 1);
+      renderCatalogServicesEditor(window._catalogItems);
+    }
+
+    function renderBillingAndTenants(plans, currentOrg, allOrgs) {
+      const grid = document.getElementById('billingPlansGrid');
+      const planKeys = ['free', 'growth', 'business'];
+      grid.innerHTML = planKeys.map(k => {
+        const p = plans[k] || {};
+        const isCurrent = currentOrg.plan_tier === k;
+        return `
+          <div class="draft-card" style="border-color:${isCurrent ? 'var(--gold)' : 'var(--border)'};">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="color:var(--gold-light); font-size:1.1rem;">${p.name_ar || k}</h4>
+              ${isCurrent ? '<span class="badge gold">باقتك الحالية ✓</span>' : ''}
+            </div>
+            <div style="font-size:1.75rem; font-weight:900; margin:0.6rem 0;">$${p.price_monthly_usd || 0} <span style="font-size:0.8rem; color:var(--muted);">/ شهرياً</span></div>
+            <div style="font-size:0.82rem; color:#cbd5e1; margin-bottom:1rem;">
+              • ${p.leads_quota} عميل / شهر<br/>
+              • ${p.emails_quota} رسالة بريد / شهر<br/>
+              • ${p.proposals_quota} عرض تفاعلي / شهر<br/>
+              • ${p.white_label_proposals ? '✅ شامل White-Label بهوية شركتك' : '⚡ علامة المنصة القياسية'}
+            </div>
+            <button class="${isCurrent ? '' : 'gold'}" style="width:100%; justify-content:center;" onclick="upgradePlanNow('${k}')">
+              ${isCurrent ? 'تحديث / تجديد الباقة' : '🚀 الترقية الفورية لهذه الباقة'}
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      const tbody = document.getElementById('tenantsAdminTableBody');
+      tbody.innerHTML = (allOrgs || []).map(o => `
+        <tr>
+          <td>#${o.id}</td>
+          <td><strong>${o.name}</strong><div style="font-size:0.75rem; color:var(--muted);">${o.domain || o.slug}</div></td>
+          <td>${o.industry}</td>
+          <td><span class="badge gold">${(o.plan_tier || '').toUpperCase()}</span></td>
+          <td>${o.leads_used} / ${o.leads_quota}</td>
+          <td>${o.emails_used} / ${o.emails_quota}</td>
+          <td>${o.proposals_used} / ${o.proposals_quota}</td>
+          <td>
+            <select onchange="adminUpgradeOrg(${o.id}, this.value)" style="width:130px; padding:0.3rem;">
+              <option value="free" ${o.plan_tier==='free'?'selected':''}>Free</option>
+              <option value="growth" ${o.plan_tier==='growth'?'selected':''}>Growth</option>
+              <option value="business" ${o.plan_tier==='business'?'selected':''}>Business</option>
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadSettingsIntoForm() {
+      const res = await fetch('/api/settings', { headers: getAuthHeaders() });
+      const s = await res.json();
+      document.getElementById('cfgProvider').value = s.llm.provider || 'gemini';
+      document.getElementById('cfgModel').value = s.llm.model || 'gemini-3.8-flash';
+      document.getElementById('cfgDryRun').value = s.sender.dry_run ? 'true' : 'false';
+      document.getElementById('modeBadge').textContent = s.sender.dry_run ? 'Dry-Run الآمن' : 'إرسال فعلي Live';
+      document.getElementById('cfgCalendarLink').value = s.sender.calendar_booking_link || '';
+      document.getElementById('cfgDailyCap').value = s.sender.daily_send_cap || 40;
+      document.getElementById('cfgSenderName').value = s.sender.sender_name || '';
+      document.getElementById('cfgSenderEmail').value = s.sender.sender_email || '';
+      document.getElementById('cfgSmtpHost').value = s.sender.smtp_host || 'smtp.gmail.com';
+      document.getElementById('cfgSmtpPort').value = s.sender.smtp_port || 587;
+      document.getElementById('cfgSmtpUser').value = s.sender.smtp_username || '';
+      document.getElementById('cfgImapHost').value = s.sender.imap_host || 'imap.gmail.com';
+      document.getElementById('cfgImapPort').value = s.sender.imap_port || 993;
+      document.getElementById('cfgWindowStart').value = s.sender.sending_window_start_hour || 9;
+      document.getElementById('cfgWindowEnd').value = s.sender.sending_window_end_hour || 17;
+      document.getElementById('cfgMinScore').value = s.icp.min_qualification_score || 65;
+      document.getElementById('cfgMaxWords1').value = (s.writer && s.writer.max_words_step_1) || 75;
+      document.getElementById('cfgAutoApprove').value = (s.system && s.system.auto_approve_sequences) ? 'true' : 'false';
+      document.getElementById('cfgBuzzAr').value = ((s.writer && s.writer.banned_buzzwords_ar) || []).join('\n');
+      document.getElementById('cfgBuzzEn').value = ((s.writer && s.writer.banned_buzzwords_en) || []).join('\n');
+
+      // Company Profile fields
+      const cp = s.company_profile || {};
+      document.getElementById('profCompanyNameAr').value = cp.company_name_ar || '';
+      document.getElementById('profCompanyNameEn').value = cp.company_name_en || '';
+      document.getElementById('profIndustry').value = cp.industry || '';
+      document.getElementById('profWebsite').value = cp.website || '';
+      document.getElementById('profTaglineAr').value = cp.tagline_ar || '';
+      document.getElementById('profPersonaAr').value = cp.sender_persona_ar || s.icp.sender_persona_ar || '';
+      document.getElementById('profCurrency').value = cp.currency || 'SAR';
+      document.getElementById('profValueAr').value = cp.value_proposition_ar || s.icp.value_proposition_ar || '';
+      document.getElementById('profValueEn').value = cp.value_proposition_en || s.icp.value_proposition_en || '';
+      document.getElementById('profTargetIndustries').value = (cp.target_industries || s.icp.target_industries || []).join('\n');
+      document.getElementById('profWarrantyAr').value = cp.warranty_terms_ar || '';
+      renderCatalogServicesEditor(cp.services_catalog || []);
+    }
+
+    async function saveSettings() {
+      showToast('⏳ جاري حفظ الإعدادات بشكل دائم...');
+      const payload = {
+        ai_provider: document.getElementById('cfgProvider').value,
+        ai_model: document.getElementById('cfgModel').value,
+        gemini_api_key: document.getElementById('cfgGeminiKey').value || undefined,
+        openai_api_key: document.getElementById('cfgOpenaiKey').value || undefined,
+        dry_run: document.getElementById('cfgDryRun').value === 'true',
+        auto_approve_sequences: document.getElementById('cfgAutoApprove').value === 'true',
+        calendar_booking_link: document.getElementById('cfgCalendarLink').value,
+        daily_send_cap: parseInt(document.getElementById('cfgDailyCap').value) || 40,
+        sender_name: document.getElementById('cfgSenderName').value,
+        sender_email: document.getElementById('cfgSenderEmail').value,
+        smtp_host: document.getElementById('cfgSmtpHost').value,
+        smtp_port: parseInt(document.getElementById('cfgSmtpPort').value) || 587,
+        smtp_username: document.getElementById('cfgSmtpUser').value,
+        smtp_password: document.getElementById('cfgSmtpPass').value || undefined,
+        imap_host: document.getElementById('cfgImapHost').value,
+        imap_port: parseInt(document.getElementById('cfgImapPort').value) || 993,
+        sending_window_start_hour: parseInt(document.getElementById('cfgWindowStart').value) || 9,
+        sending_window_end_hour: parseInt(document.getElementById('cfgWindowEnd').value) || 17,
+        min_qualification_score: parseInt(document.getElementById('cfgMinScore').value) || 65,
+        max_words_step_1: parseInt(document.getElementById('cfgMaxWords1').value) || 75,
+        banned_buzzwords_ar: document.getElementById('cfgBuzzAr').value.split('\n').map(x=>x.trim()).filter(Boolean),
+        banned_buzzwords_en: document.getElementById('cfgBuzzEn').value.split('\n').map(x=>x.trim()).filter(Boolean),
+        value_proposition_ar: document.getElementById('profValueAr').value,
+        value_proposition_en: document.getElementById('profValueEn').value
+      };
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload)
+      });
+      await refreshData();
+      showToast('✅ تم حفظ كافة الإعدادات بشكل دائم!');
+    }
+
+    async function runSmartCompanyProfiler() {
+      showToast('🧠 جاري فحص موقع ونشاط الشركة وبناء قاعدة المعرفة والكتالوج...');
+      const payload = {
+        company_name_hint: document.getElementById('profCompanyNameAr').value.trim(),
+        industry_hint: document.getElementById('profIndustry').value.trim(),
+        website_url: document.getElementById('profWebsite').value.trim(),
+        raw_profile_text: document.getElementById('profRawText').value.trim()
+      };
+      const res = await fetch('/api/company/profile-analyze', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        await refreshData();
+        showToast('✨ تم استيعاب هوية الشركة وتوليد الـ ICP وكتالوج الخدمات بنجاح!');
+      } else {
+        showToast('⚠️ تعذر إكمال التحليل.');
+      }
+    }
+
+    async function saveCompanyProfileManual() {
+      showToast('💾 جاري حفظ هوية الشركة وكتالوج الخدمات...');
+      const profile = {
+        company_name_ar: document.getElementById('profCompanyNameAr').value.trim(),
+        company_name_en: document.getElementById('profCompanyNameEn').value.trim(),
+        industry: document.getElementById('profIndustry').value.trim(),
+        website: document.getElementById('profWebsite').value.trim(),
+        tagline_ar: document.getElementById('profTaglineAr').value.trim(),
+        sender_persona_ar: document.getElementById('profPersonaAr').value.trim(),
+        currency: document.getElementById('profCurrency').value,
+        value_proposition_ar: document.getElementById('profValueAr').value.trim(),
+        value_proposition_en: document.getElementById('profValueEn').value.trim(),
+        target_industries: document.getElementById('profTargetIndustries').value.split('\n').map(x=>x.trim()).filter(Boolean),
+        warranty_terms_ar: document.getElementById('profWarrantyAr').value.trim(),
+        services_catalog: window._catalogItems || []
+      };
+      await fetch('/api/company/profile-save', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ company_profile: profile })
+      });
+      await refreshData();
+      showToast('✅ تم حفظ هوية الشركة وكتالوج الخدمات بنجاح!');
+    }
+
+    function loadProfileFileText(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('profRawText').value = e.target.result || '';
+        showToast('📄 تم قراءة محتوى الملف التعريفي. اضغط على زر التحليل الذكي الآن.');
+      };
+      reader.readAsText(file);
+    }
+
+    async function testAiConnectionBtn() {
+      const box = document.getElementById('diagnosticsResultBox');
+      box.style.display = 'block';
+      box.textContent = '⏳ جاري اختبار الاتصال بمحرك الذكاء الاصطناعي...';
+      const res = await fetch('/api/diagnostics/ai', { method: 'POST', headers: getAuthHeaders() });
+      const data = await res.json();
+      box.innerHTML = `<strong>🧠 نتيجة فحص الذكاء الاصطناعي:</strong> ${data.message}`;
+    }
+
+    async function testEmailConnectionBtn() {
+      const box = document.getElementById('diagnosticsResultBox');
+      box.style.display = 'block';
+      box.textContent = '⏳ جاري اختبار الاتصال بخوادم SMTP / IMAP...';
+      const payload = {
+        smtp_host: document.getElementById('cfgSmtpHost').value,
+        smtp_port: parseInt(document.getElementById('cfgSmtpPort').value) || 587,
+        smtp_username: document.getElementById('cfgSmtpUser').value,
+        smtp_password: document.getElementById('cfgSmtpPass').value,
+        imap_host: document.getElementById('cfgImapHost').value,
+        imap_port: parseInt(document.getElementById('cfgImapPort').value) || 993,
+        imap_username: document.getElementById('cfgSmtpUser').value,
+        imap_password: document.getElementById('cfgSmtpPass').value
+      };
+      const res = await fetch('/api/diagnostics/email', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      box.innerHTML = `<strong>📧 نتيجة فحص SMTP:</strong> ${data.smtp.message}<br/><strong>📥 نتيجة فحص IMAP:</strong> ${data.imap.message}`;
+    }
+
+    async function executePipelineRun() {
+      closeModal('scoutModal');
+      showToast('🚀 جاري تشغيل دورة الاستكشاف والتأهيل والصياغة...');
+      const payload = {
+        industry: document.getElementById('scoutIndustryInput').value.trim() || null,
+        region: document.getElementById('scoutRegionInput').value.trim() || null,
+        language: document.getElementById('scoutLangSelect').value,
+        limit: parseInt(document.getElementById('scoutLimitInput').value) || 4,
+        auto_approve: false
+      };
+      const res = await fetch('/api/pipeline/run', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast('⚠️ ' + (data.detail || 'تجاوزت الحد المسموح في الباقة.'));
+        return;
+      }
+      await refreshData();
+      showToast(`✅ اكتملت الدورة: تم اكتشاف ${data.discovered_count} وتأهيل ${data.qualified_count} وصياغة ${data.drafts_created} رسالة!`);
+    }
+
+    async function completeOnboardingWizard() {
+      const name = document.getElementById('wizCompanyName').value.trim();
+      const ind = document.getElementById('wizIndustry').value.trim();
+      const desc = document.getElementById('wizDescription').value.trim();
+      closeModal('onboardingModal');
+      showToast('🧭 جاري تهيئة حساب شركتك وتشغيل أول حملة...');
+      await fetch('/api/company/profile-analyze', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          company_name_hint: name,
+          industry_hint: ind,
+          raw_profile_text: desc
+        })
+      });
+      await fetch('/api/pipeline/run', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ industry: ind || null, language: 'ar', limit: 3 })
+      });
+      await refreshData();
+      showToast('🎉 اكتملت التهيئة وتم استكشاف أول دفعة من العملاء المحتملين لشركتك!');
+    }
+
+    async function approveAllPending() {
+      const res = await fetch('/api/drafts/approve-all', { method: 'POST', headers: getAuthHeaders() });
+      const data = await res.json();
+      await refreshData();
+      showToast(`✅ تم اعتماد ${data.approved_count} مسودة بريد!`);
+    }
+
+    async function updateDraft(id, action) {
+      const subject = document.getElementById('subj-' + id).value;
+      const body = document.getElementById('body-' + id).value;
+      await fetch(`/api/drafts/${id}`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ action, subject, body })
+      });
+      await refreshData();
+      showToast('✅ تم تحديث المسودة!');
+    }
+
+    async function triggerSender() {
+      showToast('📤 جاري إرسال الرسائل المعتمدة...');
+      const res = await fetch('/api/agents/send', { method: 'POST', headers: getAuthHeaders() });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast('⚠️ ' + (data.detail || 'تجاوزت حصة الباقة.'));
+        return;
+      }
+      await refreshData();
+      showToast(`✅ تم إرسال ${data.sent_count} رسالة بنجاح!`);
+    }
+
+    async function enrichSingleLead(id) {
+      showToast('🛡️ جاري فحص وتقييم العميل...');
+      await fetch(`/api/leads/${id}/enrich`, { method: 'POST', headers: getAuthHeaders() });
+      await refreshData();
+      showToast('✅ تم تحديث تقييم الـ ICP!');
+    }
+
+    async function writeSingleLead(id) {
+      showToast('✍️ جاري كتابة سلسلة الرسائل...');
+      await fetch(`/api/leads/${id}/write`, { method: 'POST', headers: getAuthHeaders() });
+      await refreshData();
+      showToast('✅ تم إنشاء 3 مسودات في سلم الموافقات!');
+    }
+
+    async function runWriterForAll() {
+      showToast('✍️ جاري كتابة سلاسل البريد لجميع العملاء المؤهلين...');
+      await fetch('/api/agents/write', { method: 'POST', headers: getAuthHeaders() });
+      await refreshData();
+      showToast('✅ تمت صياغة الرسائل!');
+    }
+
+    function setReplyPreset(type) {
+      const box = document.getElementById('sandboxReplyBody');
+      if (type === 'interested') box.value = 'نعم نحن مهتمون جداً، هل يمكننا حجز موعد اجتماع هذا الأسبوع لمناقشة العرض الفني والمالي؟';
+      if (type === 'question') box.value = 'شكراً لتواصلكم، هل يمكن تزويدنا بأسعار الباقات ومدة التنفيذ المتوقعة؟';
+      if (type === 'objection') box.value = 'نحن مرتبطون حالياً مع مزود آخر، يمكنكم التواصل معنا في الربع القادم.';
+    }
+
+    async function simulateIncomingReply() {
+      const from_email = document.getElementById('sandboxLeadSelect').value;
+      const body = document.getElementById('sandboxReplyBody').value;
+      showToast('📥 جاري تحليل الرد وتصنيف النية...');
+      await fetch('/api/agents/simulate-reply', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ from_email, subject: 'Re: تواصل', body })
+      });
+      await refreshData();
+      showToast('✅ تم تصنيف الرد وإيقاف المتابعات التلقائية لهذا العميل!');
+    }
+
+    async function submitGenerateProposal() {
+      const lead_id = parseInt(document.getElementById('propLeadSelect').value);
+      const transcript_text = document.getElementById('propTranscriptInput').value;
+      const custom_notes = document.getElementById('propNotesInput').value;
+      closeModal('proposalModal');
+      showToast('💎 جاري توليد العرض الفني والمالي التفاعلي...');
+      const res = await fetch('/api/proposals/generate', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ lead_id, transcript_text, custom_notes })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast('⚠️ ' + (data.detail || 'تجاوزت حصة العروض في باقتك.'));
+        return;
+      }
+      await refreshData();
+      showToast(`✅ تم إصدار العرض التفاعلي على الرابط ${data.proposal_urls.local_url}!`);
+    }
+
+    async function submitManualLead() {
+      const payload = {
+        company_name: document.getElementById('mlCompany').value,
+        website: document.getElementById('mlWebsite').value,
+        industry: document.getElementById('mlIndustry').value || 'Tech',
+        region: document.getElementById('mlRegion').value,
+        contact_name: document.getElementById('mlContact').value,
+        contact_role: document.getElementById('mlRole').value,
+        contact_email: document.getElementById('mlEmail').value,
+        company_summary: document.getElementById('mlSummary').value,
+        language: document.getElementById('mlLang').value
+      };
+      closeModal('manualLeadModal');
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload)
+      });
+      await refreshData();
+      showToast('✅ تمت إضافة وتأهيل العميل بنجاح!');
+    }
+
+    async function submitCsvImport() {
+      const fileInput = document.getElementById('csvFileInput');
+      if (!fileInput.files.length) return;
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      closeModal('csvModal');
+      await fetch('/api/leads/import-csv', { method: 'POST', body: formData });
+      await refreshData();
+      showToast('✅ تم استيراد ملف CSV بنجاح!');
+    }
+
+    async function toggleAutopilot(enabled) {
+      await fetch('/api/autopilot/toggle', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ enabled })
+      });
+      showToast(enabled ? '🤖 تم تفعيل الطيار الآلي المستمر!' : '⏸️ تم إيقاف الطيار الآلي.');
+    }
+
+    async function runAutopilotCycleNow() {
+      showToast('⚡ جاري تنفيذ دورة الطيار الآلي الفورية...');
+      const res = await fetch('/api/autopilot/run-cycle', { method: 'POST', headers: getAuthHeaders() });
+      const data = await res.json();
+      document.getElementById('autopilotCyclesBadge').textContent = `الدورات المنفذة: ${data.cycle || 1}`;
+      await refreshData();
+      showToast('✅ اكتملت دورة الطيار الآلي!');
+    }
+
+    async function upgradePlanNow(plan_tier) {
+      const res = await fetch('/api/billing/upgrade', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ plan_tier, billing_cycle: 'monthly' })
+      });
+      if (res.ok) {
+        await refreshData();
+        showToast(`🎉 تمت ترقية باقتك بنجاح إلى (${plan_tier.toUpperCase()})!`);
+      }
+    }
+
+    async function adminUpgradeOrg(org_id, plan_tier) {
+      await fetch('/api/superadmin/upgrade-org', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ org_id, plan_tier })
+      });
+      await refreshData();
+      showToast(`👑 تم تحديث باقة الشركة #${org_id} إلى ${plan_tier.toUpperCase()}!`);
+    }
+
+    // Check URL params for first-time onboarding
+    if (window.location.search.includes('onboarding=1')) {
+      setTimeout(() => openOnboardingWizard(), 400);
+    }
+
+    refreshData();
+  </script>
+</body>
+</html>

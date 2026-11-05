@@ -1,0 +1,73 @@
+# الإعدادات العامة لمنصة نضج | NUDHUJ AutoDeal OS (autodeal.nudhuj.com)
+system:
+  name: "NUDHUJ AutoDeal OS"
+  domain: "https://autodeal.nudhuj.com"
+  default_language: "ar"
+  dry_run: true
+  auto_approve_sequences: false
+  autopilot_enabled: false
+  autopilot_interval_minutes: 15
+
+llm:
+  provider: "gemini"
+  model: "gemini-3.8-flash"
+  max_output_tokens: 1500
+
+icp:
+  min_qualification_score: 65
+  target_industries:
+    - "التجارة الإلكترونية والتجزئة (E-commerce & Retail)"
+    - "البرمجيات كخدمة والتقنية (SaaS & Tech)"
+    - "الخدمات المالية والتقنية المالية (FinTech)"
+    - "الرعاية الصحية والعيادات (HealthTech)"
+    - "الخدمات اللوجستية وسلاسل الإمداد (Logistics)"
+    - "العقارات والمقاولات والضيافة (Real Estate & Hospitality)"
+  target_regions:
+    - "المملكة العربية السعودية"
+    - "الإمارات العربية المتحدة"
+    - "مصر"
+    - "الخليج والشرق الأوسط (MENA)"
+    - "Global"
+  value_proposition_ar: >-
+    نقدم حلول أتمتة ذكية ومتكاملة تساعد الشركات على زيادة المبيعات
+    وتقليل تكاليف التشغيل بنسبة 40% خلال 60 يوماً.
+  value_proposition_en: >-
+    We build autonomous workflow and revenue growth systems that help B2B teams
+    increase qualified pipeline and reduce operational overhead by 40% within 60 days.
+  sender_persona_ar: "مستشار تطوير الأعمال والشراكات الاستراتيجية"
+  sender_persona_en: "VP of Business Development & Strategic Growth"
+
+writer:
+  sequence_steps: 3
+  step_delays_days: [0, 3, 7]
+  max_words_step_1: 75
+  max_words_step_2: 50
+  max_words_step_3: 40
+  banned_buzzwords_en:
+    - "I hope this email finds you well"
+    - "synergy"
+    - "game-changer"
+    - "revolutionary"
+    - "cutting-edge"
+    - "delve"
+    - "tapestry"
+    - "unlock your potential"
+    - "paradigm shift"
+  banned_buzzwords_ar:
+    - "أتمنى أن تصلك رسالتي هذه وأنت بخير"
+    - "ثورة غير مسبوقة"
+    - "قفزة نوعية خارقة"
+    - "عصر جديد من التميز"
+    - "نحن الأفضل في العالم"
+
+sender:
+  daily_send_cap: 40
+  min_delay_seconds: 120
+  max_delay_seconds: 360
+  sending_window_start_hour: 9
+  sending_window_end_hour: 17
+  timezone: "Asia/Riyadh"
+  stop_on_reply: true
+  sender_name: "فريق تطوير الأعمال | نضج"
+  sender_email: "sales@nudhuj.com"
+  calendar_booking_link: "https://calendly.com/nudhuj/discovery-call"

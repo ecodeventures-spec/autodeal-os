@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>العرض الفني والمالي التفاعلي | NUDHUJ AutoDeal OS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --surface: #131720;
+      --surface-2: #1b2130;
+      --border: rgba(212, 175, 55, 0.22);
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --emerald: #10b981;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', system-ui, sans-serif; }
+    body {
+      background: radial-gradient(circle at top right, rgba(212,175,55,0.10), transparent 45%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.65;
+      padding-bottom: 5rem;
+      user-select: none;
+      position: relative;
+      overflow-x: hidden;
+    }
+    /* Layer 1: Dynamic Diagonal IP Watermark Overlay */
+    .watermark-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.045;
+      background-size: 380px 220px;
+      display: flex;
+      flex-wrap: wrap;
+      transform: rotate(-22deg) scale(1.35);
+      justify-content: center;
+      align-items: center;
+      gap: 4rem;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--gold-light);
+      text-align: center;
+    }
+    .container { max-width: 1120px; margin: 0 auto; padding: 2rem 1.25rem; position: relative; z-index: 2; }
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      padding: 1rem 1.5rem; background: rgba(19, 23, 32, 0.88); backdrop-filter: blur(12px);
+      border: 1px solid var(--border); border-radius: 1rem; margin-bottom: 2rem;
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 0.9rem; }
+    .brand-logo { width: 46px; height: 46px; border-radius: 0.65rem; object-fit: cover; border: 1px solid var(--gold); }
+    .badge-gold {
+      background: rgba(212, 175, 55, 0.14); color: var(--gold-light); border: 1px solid var(--border);
+      padding: 0.3rem 0.85rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700;
+    }
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 0.3rem 0.85rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700;
+    }
+    .hero-card {
+      background: linear-gradient(135deg, rgba(27,33,48,0.95) 0%, rgba(15,18,26,0.98) 100%);
+      border: 1px solid var(--border); border-radius: 1.25rem; padding: 2.5rem 2rem; margin-bottom: 2rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    .hero-title { font-size: 2rem; font-weight: 900; color: #fff; margin: 0.75rem 0; }
+    .hero-sub { color: var(--gold-light); font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; }
+    .meta-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+      margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .meta-item span { display: block; font-size: 0.78rem; color: var(--muted); }
+    .meta-item strong { font-size: 1rem; color: #fff; }
+    .section-card {
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1rem; padding: 1.75rem; margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-size: 1.25rem; font-weight: 800; color: var(--gold-light);
+      margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .scope-list { list-style: none; display: grid; gap: 0.75rem; }
+    .scope-item {
+      background: var(--surface-2); padding: 0.9rem 1.15rem; border-radius: 0.75rem;
+      border-right: 3px solid var(--gold); display: flex; align-items: center; gap: 0.75rem;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    th, td { padding: 0.95rem 1rem; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    th { color: var(--muted); font-size: 0.82rem; background: rgba(255,255,255,0.02); }
+    .addon-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      background: var(--surface-2); padding: 1rem 1.25rem; border-radius: 0.75rem;
+      margin-bottom: 0.75rem; border: 1px solid transparent; cursor: pointer; transition: all 0.2s;
+    }
+    .addon-row.selected { border-color: var(--gold); background: rgba(212, 175, 55, 0.08); }
+    .totals-box {
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 0.9rem;
+      padding: 1.35rem; margin-top: 1.25rem;
+    }
+    .totals-line { display: flex; justify-content: space-between; padding: 0.45rem 0; font-size: 0.95rem; }
+    .totals-line.grand {
+      border-top: 1px solid rgba(255,255,255,0.12); margin-top: 0.5rem; padding-top: 0.85rem;
+      font-size: 1.35rem; font-weight: 900; color: var(--gold-light);
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem; }
+    .milestone-box {
+      background: var(--surface-2); padding: 1rem 1.2rem; border-radius: 0.75rem;
+      margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-accept {
+      background: linear-gradient(135deg, #d4af37 0%, #b58922 100%);
+      color: #090d16; font-weight: 900; font-size: 1.05rem; border: none;
+      padding: 0.95rem 2rem; border-radius: 0.75rem; cursor: pointer; transition: transform 0.15s;
+    }
+    .btn-accept:hover { transform: translateY(-2px); }
+    .legal-footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+      background: #07090e; border-top: 2px solid var(--gold);
+      padding: 0.55rem 1rem; text-align: center; font-size: 0.78rem;
+    }
+    .legal-footer .ar { color: #f8fafc; font-weight: 700; }
+    .legal-footer .en { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.04em; }
+    input.sig-input {
+      background: #0b0d12; border: 1px solid var(--border); color: #fff;
+      padding: 0.8rem 1rem; border-radius: 0.6rem; width: 280px; font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+  <div id="watermarkOverlay" class="watermark-layer"></div>
+
+  <div class="container">
+    <div class="top-bar">
+      <div class="brand-lockup">
+        <img src="/assets/logo.jpg" alt="Logo" class="brand-logo" onerror="this.style.display='none'" />
+        <div>
+          <div id="providerNameHeader" style="font-weight:800; font-size:1.1rem; color:var(--gold-light);">نضج لحلول الأعمال الذكية</div>
+          <div id="proposalSlugBadge" style="font-size:0.78rem; color:var(--muted);">منظومة العروض التفاعلية المشفرة</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:0.65rem; align-items:center;">
+        <span id="statusBadge" class="badge-gold">عرض فني ومالي معتمد</span>
+        <button onclick="window.print()" style="background:var(--surface-2); color:#fff; border:1px solid rgba(255,255,255,0.15); padding:0.45rem 0.95rem; border-radius:0.5rem; cursor:pointer;">🖨️ طباعة / PDF</button>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <span class="badge-gold" id="industryBadge">حلول الأعمال المتكاملة</span>
+      <h1 class="hero-title" id="propTitle">العرض الفني والمالي</h1>
+      <div class="hero-sub" id="propSubtitle"></div>
+      <p id="execSummary" style="color:#cbd5e1; font-size:1.02rem; margin-top:0.75rem;"></p>
+
+      <div class="meta-grid">
+        <div class="meta-item"><span>مقدم إلى شركة</span><strong id="clientCompany">-</strong></div>
+        <div class="meta-item"><span>عناية الأستاذ / المسؤول</span><strong id="clientContact">-</strong></div>
+        <div class="meta-item"><span>صلاحية العرض</span><strong id="validDays">15 يوماً</strong></div>
+        <div class="meta-item"><span>عدد مرات الاستعراض</span><strong id="viewsCount">1</strong></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">🎯 نطاق العمل والمواصفات الفنية المعتمدة (Scope of Work)</div>
+      <ul class="scope-list" id="scopeList"></ul>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">💰 العرض المالي والباقات الاختيارية التفاعلية (Interactive Financial Offer)</div>
+      <table>
+        <thead>
+          <tr>
+            <th>البند / الخدمة</th>
+            <th>الكمية</th>
+            <th>سعر الوحدة</th>
+            <th>الإجمالي</th>
+          </tr>
+        </thead>
+        <tbody id="financialTableBody"></tbody>
+      </table>
+
+      <div style="margin-top:1.5rem;">
+        <h4 style="color:var(--gold-light); margin-bottom:0.75rem; font-size:0.95rem;">✨ ترقيات وباقات إضافية اختيارية (انقر لإضافتها للعرض حسابياً):</h4>
+        <div id="addonsContainer"></div>
+      </div>
+
+      <div class="totals-box">
+        <div class="totals-line"><span>المجموع الأساسي:</span><strong id="subTotalVal">0</strong></div>
+        <div class="totals-line"><span>الترقيات الإضافية المختارة:</span><strong id="addonsTotalVal" style="color:var(--emerald);">0</strong></div>
+        <div class="totals-line"><span>الخصم الممنوح (<span id="discountPct">0</span>%):</span><strong id="discountVal" style="color:#f87171;">0</strong></div>
+        <div class="totals-line"><span>ضريبة القيمة المضافة (15%):</span><strong id="vatVal">0</strong></div>
+        <div class="totals-line grand"><span>صافي الاستثمار الإجمالي الشامل:</span><span id="grandTotalVal">0</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="section-card">
+        <div class="section-title">📅 جدول الدفعات المالية (Payment Milestones)</div>
+        <div id="milestonesContainer"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">🚀 خارطة طريق التنفيذ والعائد المتوقع (Roadmap & ROI)</div>
+        <div id="roadmapContainer"></div>
+        <div style="margin-top:1rem; padding:1rem; background:rgba(16,185,129,0.09); border:1px solid rgba(16,185,129,0.3); border-radius:0.75rem;">
+          <div style="font-weight:800; color:#34d399; margin-bottom:0.3rem;">📈 مؤشر العائد الاستثماري المتوقع (ROI):</div>
+          <div id="roiSummaryText" style="font-size:0.9rem; color:#e2e8f0;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">🛡️ شروط الضمان واتفاقية مستوى الخدمة (Warranty & SLA)</div>
+      <p id="warrantyText" style="color:#cbd5e1;"></p>
+    </div>
+
+    <div class="section-card" id="acceptanceCard" style="border-color:var(--gold); text-align:center; padding:2.25rem;">
+      <h3 style="color:var(--gold-light); font-size:1.4rem; margin-bottom:0.5rem;">✍️ الاعتماد الإلكتروني الرسمي للعرض</h3>
+      <p style="color:var(--muted); font-size:0.92rem; margin-bottom:1.25rem;">بإدخال الاسم والضغط على زر الاعتماد، يتم توثيق الموافقة المبدئية وإشعار فريق التنفيذ فوراً لإصدار العقد.</p>
+      <div id="acceptFormArea" style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        <input type="text" id="signerNameInput" class="sig-input" placeholder="الاسم الكامل والمسمى الوظيفي للمفوض..." />
+        <button class="btn-accept" onclick="acceptProposalNow()">✅ اعتماد العرض رسمياً الآن</button>
+      </div>
+      <div id="acceptedConfirmation" style="display:none; color:#34d399; font-weight:800; font-size:1.1rem; margin-top:1rem;"></div>
+    </div>
+  </div>
+
+  <div class="legal-footer">
+    <div class="ar" id="footerArText">الملكية الفكرية محفوظة | يحظر الاستخدام أو النسخ بدون موافقة كتابية مسبقة</div>
+    <div class="en" id="footerEnText">AUTODEAL OS • TURNKEY INTERACTIVE PROPOSAL ARCHITECTURE</div>
+  </div>
+
+  <script>
+    let proposalData = null;
+    let selectedAddons = new Set();
+
+    function getSlugFromPath() {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      return parts[parts.length - 1];
+    }
+
+    function fmtMoney(val, currency = 'SAR') {
+      return Number(val || 0).toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + currency;
+    }
+
+    async function loadProposal() {
+      const slug = getSlugFromPath();
+      const res = await fetch(`/api/proposals/public/${encodeURIComponent(slug)}`);
+      if (!res.ok) {
+        document.getElementById('propTitle').textContent = 'لم يتم العثور على العرض المطلوب';
+        return;
+      }
+      proposalData = await res.json();
+      renderProposal();
+    }
+
+    function renderProposal() {
+      const p = proposalData;
+      const cur = p.currency || 'SAR';
+      document.title = `${p.title_ar} | ${p.client_company}`;
+      document.getElementById('providerNameHeader').textContent = p.provider_name_ar || 'نضج لحلول الأعمال';
+      document.getElementById('proposalSlugBadge').textContent = p.white_label
+        ? `العرض الرسمي المعتمد • ${p.slug}`
+        : `مدعوم بواسطة NUDHUJ AutoDeal OS • ${p.slug}`;
+      document.getElementById('industryBadge').textContent = p.industry || 'حلول الأعمال B2B';
+      document.getElementById('propTitle').textContent = p.title_ar;
+      document.getElementById('propSubtitle').textContent = p.hero_subtitle_ar;
+      document.getElementById('execSummary').textContent = p.executive_summary_ar;
+      document.getElementById('clientCompany').textContent = p.client_company;
+      document.getElementById('clientContact').textContent = p.client_contact || 'الإدارة التنفيذية';
+      document.getElementById('validDays').textContent = `${p.valid_days || 15} يوماً من تاريخ الإصدار`;
+      document.getElementById('viewsCount').textContent = p.views_count || 1;
+      document.getElementById('warrantyText').textContent = p.warranty_terms_ar;
+
+      // Watermark & Legal Footer
+      const brandLabel = p.provider_name_ar || 'NUDHUJ AUTODEAL OS';
+      const wmContainer = document.getElementById('watermarkOverlay');
+      wmContainer.innerHTML = Array.from({length: 28}).map(() =>
+        `<div>${brandLabel} ©<br/>ملكية فكرية محمية - يمنع النسخ</div>`
+      ).join('');
+      document.getElementById('footerArText').textContent =
+        `الملكية الفكرية لشركة ${brandLabel} | يحظر الاستخدام أو النسخ بدون موافقة كتابية مسبقة`;
+      document.getElementById('footerEnText').textContent = p.white_label
+        ? `${(p.provider_name_en || brandLabel).toUpperCase()} • PROPRIETARY COMMERCIAL PROPOSAL`
+        : `${(p.provider_name_en || brandLabel).toUpperCase()} • POWERED BY NUDHUJ AUTODEAL OS (AUTODEAL.NUDHUJ.COM)`;
+
+      // Scope
+      document.getElementById('scopeList').innerHTML = (p.scope_items || []).map(s =>
+        `<li class="scope-item"><span>✅</span><span>${s.title_ar}</span></li>`
+      ).join('');
+
+      // Financial Table
+      document.getElementById('financialTableBody').innerHTML = (p.financial_items || []).map(item => `
+        <tr>
+          <td><strong>${item.item_ar}</strong><div style="font-size:0.8rem; color:var(--muted);">${item.description_ar || ''}</div></td>
+          <td>${item.qty}</td>
+          <td>${fmtMoney(item.unit_price, cur)}</td>
+          <td><strong>${fmtMoney(item.total, cur)}</strong></td>
+        </tr>
+      `).join('');
+
+      // Addons
+      document.getElementById('addonsContainer').innerHTML = (p.optional_addons || []).map((a, idx) => {
+        const isSel = selectedAddons.has(idx);
+        return `
+          <div class="addon-row ${isSel ? 'selected' : ''}" onclick="toggleAddon(${idx})">
+            <div>
+              <strong>${isSel ? '☑️' : '⬜'} ${a.name_ar}</strong>
+              <div style="font-size:0.82rem; color:var(--muted);">${a.description_ar || ''}</div>
+            </div>
+            <div style="font-weight:800; color:var(--gold-light);">+ ${fmtMoney(a.price, cur)}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Roadmap
+      document.getElementById('roadmapContainer').innerHTML = (p.execution_roadmap || []).map(r => `
+        <div class="milestone-box">
+          <div>
+            <strong style="color:var(--gold-light);">${r.phase}: ${r.title_ar}</strong>
+            <div style="font-size:0.8rem; color:var(--muted);">${r.deliverable}</div>
+          </div>
+          <span class="badge-gold">${r.duration}</span>
+        </div>
+      `).join('');
+
+      if (p.status === 'accepted') {
+        document.getElementById('statusBadge').className = 'badge-emerald';
+        document.getElementById('statusBadge').textContent = 'تم اعتماد العرض رسمياً ✓';
+        document.getElementById('acceptFormArea').style.display = 'none';
+        const conf = document.getElementById('acceptedConfirmation');
+        conf.style.display = 'block';
+        conf.textContent = `تم اعتماد هذا العرض رسمياً بواسطة (${p.accepted_by}) بتاريخ ${p.accepted_at || ''}`;
+      }
+
+      recalculateTotals();
+    }
+
+    function toggleAddon(idx) {
+      if (selectedAddons.has(idx)) selectedAddons.delete(idx);
+      else selectedAddons.add(idx);
+      renderProposal();
+    }
+
+    function recalculateTotals() {
+      const p = proposalData;
+      const cur = p.currency || 'SAR';
+      const baseSub = Number(p.subtotal_amount || 0);
+      let addonsSum = 0;
+      (p.optional_addons || []).forEach((a, idx) => {
+        if (selectedAddons.has(idx)) addonsSum += Number(a.price || 0);
+      });
+      const discPct = Number(p.discount_percent || 0);
+      const discAmount = baseSub * (discPct / 100.0);
+      const netBeforeTax = (baseSub - discAmount) + addonsSum;
+      const vat = netBeforeTax * 0.15;
+      const grand = netBeforeTax + vat;
+
+      document.getElementById('subTotalVal').textContent = fmtMoney(baseSub, cur);
+      document.getElementById('addonsTotalVal').textContent = fmtMoney(addonsSum, cur);
+      document.getElementById('discountPct').textContent = discPct;
+      document.getElementById('discountVal').textContent = '- ' + fmtMoney(discAmount, cur);
+      document.getElementById('vatVal').textContent = fmtMoney(vat, cur);
+      document.getElementById('grandTotalVal').textContent = fmtMoney(grand, cur);
+
+      document.getElementById('milestonesContainer').innerHTML = (p.payment_schedule || []).map(m => {
+        const amt = grand * (Number(m.percent || 0) / 100.0);
+        return `
+          <div class="milestone-box">
+            <div>
+              <strong>${m.stage_ar} (${m.percent}%)</strong>
+              <div style="font-size:0.8rem; color:var(--muted);">${m.trigger_ar || ''}</div>
+            </div>
+            <strong style="color:var(--gold-light);">${fmtMoney(amt, cur)}</strong>
+          </div>
+        `;
+      }).join('');
+
+      const monthlyGain = Math.round(grand * 0.28);
+      document.getElementById('roiSummaryText').textContent =
+        `العائد الشهري المتوقع: ${fmtMoney(monthlyGain, cur)} • فترة استرداد رأس المال: 3.5 أشهر • العائد السنوي المتوقع: 240%`;
+    }
+
+    async function acceptProposalNow() {
+      const signer = document.getElementById('signerNameInput').value.trim();
+      if (!signer) {
+        alert('يرجى كتابة الاسم الكامل للمفوض بالاعتماد.');
+        return;
+      }
+      const slug = getSlugFromPath();
+      const res = await fetch(`/api/proposals/public/${encodeURIComponent(slug)}/accept`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ accepted_by: signer })
+      });
+      if (res.ok) {
+        proposalData = await res.json();
+        renderProposal();
+      }
+    }
+
+    loadProposal();
+  </script>
+</body>
+</html>
